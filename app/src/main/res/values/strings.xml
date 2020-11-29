@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">My Shop</string>
+    <string name="new_products">تازه ها</string>
+    <string name="most_viewed">پر بازدید</string>
+    <string name="favorite_products">محبوب</string>
+    <string name="category">دسته بندی</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="product_name">Product Name</string>
+    <string name="Home">خانه</string>
+    <string name="shopping_cart">سبد خرید</string>
+    <string name="profile">پروفایل</string>
+    <string name="mostViewed">محصولات پر بازدید</string>
+    <string name="TopRated">بالاترین امتیاز</string>
+    <string name="New">محصولات جدید</string>
+</resources>
