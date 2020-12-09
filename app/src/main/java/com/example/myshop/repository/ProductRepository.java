@@ -1,5 +1,7 @@
 package com.example.myshop.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -32,6 +34,11 @@ public class ProductRepository {
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
     private ProductService mProductService;
     private ProductService mCategoryService;
+    Type typeCategory = new TypeToken<List<Category>>() {
+    }.getType();
+    Object categoryTypeAdapter = new GetCategoryDeserializer();
+    private Retrofit mRetrofitCategory= RetrofitInstance.getInstance(typeCategory,categoryTypeAdapter,CATEGORIES_PATH);
+
 
     public static ProductRepository getInstance() {
         if (sProductRepository == null) {
@@ -46,12 +53,6 @@ public class ProductRepository {
         Object typeAdapter = new GetProductDeserializer();
         Retrofit retrofit = RetrofitInstance.getInstance(type, typeAdapter, PRODUCTS_PATH);
         mProductService = retrofit.create(ProductService.class);
-
-        Type typeCategory = new TypeToken<List<Category>>() {
-        }.getType();
-        Object categoryTypeAdapter = new GetCategoryDeserializer();
-        Retrofit categoryRetrofit = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);
-        mCategoryService = categoryRetrofit.create(ProductService.class);
     }
 
     public void setProductListRecent() {
@@ -97,17 +98,21 @@ public class ProductRepository {
     }
 
     public void fetchCategoriesList() {
+
+      /*  Retrofit categoryRetrofit = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);*/
+        mCategoryService = mRetrofitCategory.create(ProductService.class);
         Call<List<Category>> call = mCategoryService.listCategories(QUERY_OPTIONS);
 
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 mCategoriesList.setValue(response.body());
+                Log.d("category_fetched",response.toString());
             }
 
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-
+                Log.d("category_fetched",t.toString(),t);
             }
         });
     }

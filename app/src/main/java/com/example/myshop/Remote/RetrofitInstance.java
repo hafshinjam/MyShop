@@ -19,10 +19,11 @@ import static com.example.myshop.Remote.NetworkParameters.PRODUCTS_PATH;
 
 public class RetrofitInstance {
     public static Map<String,String> QUERY_OPTIONS = new HashMap<String, String>(){{
-        put("CONSUMER_KEY",CONSUMER_KEY);
-        put("CONSUMER_SECRET",CONSUMER_SECRET);
+        put("consumer_key",CONSUMER_KEY);
+        put("consumer_secret",CONSUMER_SECRET);
     }};
     public static Retrofit getInstance(Type type, Object typeAdapter, String path) {
+
         return new Retrofit.Builder()
                 .baseUrl(path)
                 .addConverterFactory(createGsonFactory(type,typeAdapter))
@@ -35,3 +36,4 @@ public class RetrofitInstance {
         return GsonConverterFactory.create(gson);
     }
 }
+

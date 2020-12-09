@@ -1,13 +1,12 @@
 package com.example.myshop.View.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -30,7 +29,7 @@ public class CategoryListFragment extends Fragment {
     private categoryAdapter mCategoryAdapter;
     private RecyclerView mRecyclerView;
     private ProductRepository mRepository;
-    private MutableLiveData<List<Category>> mCategoryListLive;
+    private LiveData<List<Category>> mCategoryListLive;
 
     public CategoryListFragment() {
         // Required empty public constructor
@@ -46,8 +45,9 @@ public class CategoryListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRepository = ProductRepository.getInstance();
+        mCategoryListLive = mRepository.getCategoriesList();
+        registerObservers();
         mRepository.fetchCategoriesList();
-        setObservers();
     }
 
     @Override
@@ -63,29 +63,27 @@ public class CategoryListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-       setObservers();
     }
 
     private void findViews(View view) {
         mRecyclerView = view.findViewById(R.id.list);
     }
 
-    private void setObservers() {
-        mCategoryListLive = new MutableLiveData<>();
-        mCategoryListLive.observe(getActivity(), new Observer<List<Category>>() {
+    private void registerObservers() {
+        mCategoryListLive.observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
-                mCategoryListLive.setValue(categories);
-                initAdapters();
+                initAdapters(categories);
             }
         });
     }
 
-    private void initAdapters() {
+    private void initAdapters(List<Category> list) {
         if (mCategoryAdapter == null) {
-            mCategoryAdapter = new categoryAdapter(mCategoryListLive.getValue(), getActivity());
+            mCategoryAdapter = new categoryAdapter(list, getActivity().getApplicationContext());
+            mRecyclerView.setAdapter(mCategoryAdapter);
         }
-        mRecyclerView.setAdapter(mCategoryAdapter);
-        mCategoryAdapter.notifyDataSetChanged();
+        else
+            mCategoryAdapter.notifyDataSetChanged();
     }
 }

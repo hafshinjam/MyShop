@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myshop.Model.Category;
 import com.example.myshop.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +56,12 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
     class CategoryHolder extends RecyclerView.ViewHolder {
         Category mCategory;
         private TextView mCategoryText;
+        private ImageView mCategoryImage;
 
         public CategoryHolder(@NonNull View itemView) {
             super(itemView);
             mCategoryText = itemView.findViewById(R.id.categoryText);
+            mCategoryImage = itemView.findViewById(R.id.categoryImage);
             //todo Implement the behaviour on click to show
             // the list of products with specific category
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +74,10 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
         public void bindCategory(Category category) {
             mCategory = category;
             mCategoryText.setText(mCategory.getCategoryName());
+            Picasso.get()
+                    .load(mCategory.getPhotoUri())
+                    .placeholder(R.drawable.ic_category)
+                    .into(mCategoryImage);
         }
     }
 }

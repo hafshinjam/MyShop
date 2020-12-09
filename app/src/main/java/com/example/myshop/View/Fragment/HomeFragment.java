@@ -9,9 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.myshop.ListActivity;
+import com.example.myshop.View.Activity.ListActivity;
 import com.example.myshop.R;
 import com.example.myshop.repository.ProductRepository;
 
