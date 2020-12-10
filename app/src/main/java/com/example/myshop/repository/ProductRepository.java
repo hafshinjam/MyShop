@@ -55,50 +55,82 @@ public class ProductRepository {
         mProductService = retrofit.create(ProductService.class);
     }
 
-    public void setProductListRecent() {
+    public void fetchProductListRecent() {
         Map<String, String> OPTIONS = QUERY_OPTIONS;
         OPTIONS.put("orderby", "date");
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
-        Response<List<Product>> response;
-        try {
-            response = call.execute();
-            mProductList.setValue(response.body());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+         call.enqueue(new Callback<List<Product>>() {
+             @Override
+             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                 mProductList.setValue(response.body());
+             }
+
+             @Override
+             public void onFailure(Call<List<Product>> call, Throwable t) {
+                 Log.d("product_recent_fetched",t.toString(),t);
+             }
+         });
+
 
     }
 
-    public void setProductListPopularity() {
+    public void fetchProductListPopularity() {
         Map<String, String> OPTIONS = QUERY_OPTIONS;
         OPTIONS.put("orderby", "popularity");
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
-        Response<List<Product>> response;
-        try {
-            response = call.execute();
-            mProductList.setValue(response.body());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+         call.enqueue(new Callback<List<Product>>() {
+             @Override
+             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                 mProductList.setValue(response.body());
+             }
+
+             @Override
+             public void onFailure(Call<List<Product>> call, Throwable t) {
+                 Log.d("product_popular_fetched",t.toString(),t);
+             }
+         });
+
 
     }
 
-    public void setProductListTopRated() {
+    public void fetchProductListTopRated() {
         Map<String, String> OPTIONS = QUERY_OPTIONS;
         OPTIONS.put("orderby", "rating");
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
-        Response<List<Product>> response;
-        try {
-            response = call.execute();
-            mProductList.setValue(response.body());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+           call.enqueue(new Callback<List<Product>>() {
+                @Override
+                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                    mProductList.setValue(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<List<Product>> call, Throwable t) {
+                    Log.d("product_topRated_fetched",t.toString(),t);
+                }
+            });
+    }
+
+    public void fetchCategoryItemList(String categoryID) {
+        Map<String, String> OPTIONS = QUERY_OPTIONS;
+        OPTIONS.put("category", categoryID);
+        Call<List<Product>> call = mProductService.listProducts(OPTIONS);
+
+           call.enqueue(new Callback<List<Product>>() {
+               @Override
+               public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                   mProductList.setValue(response.body());
+               }
+
+               @Override
+               public void onFailure(Call<List<Product>> call, Throwable t) {
+                   Log.d("category_product_fetched",t.toString(),t);
+               }
+           });
     }
 
     public void fetchCategoriesList() {
-
       /*  Retrofit categoryRetrofit = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);*/
         mCategoryService = mRetrofitCategory.create(ProductService.class);
         Call<List<Category>> call = mCategoryService.listCategories(QUERY_OPTIONS);
@@ -124,18 +156,4 @@ public class ProductRepository {
     public MutableLiveData<List<Category>> getCategoriesList() {
         return mCategoriesList;
     }
-
-    public void setCategoryItemList(String categoryID) {
-        Map<String, String> OPTIONS = QUERY_OPTIONS;
-        OPTIONS.put("category", categoryID);
-        Call<List<Product>> call = mProductService.listProducts(OPTIONS);
-        Response<List<Product>> response;
-        try {
-            response = call.execute();
-            mProductList.setValue(response.body());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

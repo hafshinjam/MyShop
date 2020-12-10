@@ -1,6 +1,7 @@
 package com.example.myshop.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myshop.Model.Category;
 import com.example.myshop.R;
+import com.example.myshop.View.Activity.ListActivity;
+import com.example.myshop.repository.ProductRepository;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.CategoryHolder> {
     List<Category> mCategories;
     Context mContext;
+    private ProductRepository mProductRepository;
 
     public List<Category> getCategories() {
         return mCategories;
@@ -31,6 +37,7 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
 
     public categoryAdapter(List<Category> categories, Context context) {
         mContext = context.getApplicationContext();
+        mProductRepository= ProductRepository.getInstance();
         mCategories = new ArrayList<>();
         mCategories = categories;
     }
@@ -67,6 +74,11 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //todo there is bug here should find another way
+                    mProductRepository.fetchCategoryItemList(mCategory.getCategoryID());
+                    Intent intent = ListActivity.newIntent(mContext);
+                    intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intent);
                 }
             });
         }

@@ -17,9 +17,8 @@ public class GetProductDeserializer implements JsonDeserializer<List<Product>> {
     public List<Product> deserialize(JsonElement json,
                                      Type typeOfT,
                                      JsonDeserializationContext context) throws JsonParseException {
-        JsonObject body = json.getAsJsonObject();
         List<Product> list = new ArrayList<>();
-        JsonArray productArray = body.getAsJsonArray();
+        JsonArray productArray = json.getAsJsonArray();
         for (int i = 0; i < productArray.size(); i++) {
             JsonObject productObject = productArray.get(i).getAsJsonObject();
             String id = productObject.get("id").getAsString();
@@ -45,7 +44,7 @@ public class GetProductDeserializer implements JsonDeserializer<List<Product>> {
             for (int i = 0; i < imageArray.size(); i++) {
                 JsonObject imageObject = imageArray.get(i).getAsJsonObject();
                 String imageURL = imageObject.get("src").getAsString();
-
+                list.add(imageURL);
             }
         return list;
     }

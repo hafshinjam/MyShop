@@ -80,10 +80,9 @@ public class CategoryListFragment extends Fragment {
 
     private void initAdapters(List<Category> list) {
         if (mCategoryAdapter == null) {
-            mCategoryAdapter = new categoryAdapter(list, getActivity().getApplicationContext());
+            mCategoryAdapter = new categoryAdapter(list, getActivity());
             mRecyclerView.setAdapter(mCategoryAdapter);
         }
-        else
             mCategoryAdapter.notifyDataSetChanged();
     }
 }

@@ -23,8 +23,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void setFragment() {
-        Fragment fragment = getSupportFragmentManager().getFragments().get(0);
-        if (fragment==null)
+
             getSupportFragmentManager()
                     .beginTransaction()
             .replace(R.id.listContainer, ProductListFragment.newInstance(),"productListFragment")

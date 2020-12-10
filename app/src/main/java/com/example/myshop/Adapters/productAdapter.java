@@ -16,11 +16,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class productAdapters extends RecyclerView.Adapter<productAdapters.ProductHolder> {
+public class productAdapter extends RecyclerView.Adapter<productAdapter.ProductHolder> {
     List<Product> mProducts;
     Context mContext;
 
-    public productAdapters(List<Product> products, Context context) {
+    public productAdapter(List<Product> products, Context context) {
         mContext = context.getApplicationContext();
         mProducts = products;
     }
@@ -68,6 +68,7 @@ public class productAdapters extends RecyclerView.Adapter<productAdapters.Produc
             mProduct = product;
             mProductName.setText(mProduct.getName());
             mProductPrice.setText(String.valueOf(mProduct.getPrice()));
+
             Picasso.get().load(mProduct.getPhotoUriList().get(0))
                     .placeholder(R.drawable.ic_product)
                     .into(mProductImage);

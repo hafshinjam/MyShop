@@ -62,21 +62,21 @@ public class HomeFragment extends Fragment {
         mTopRatedText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProductRepository.setProductListTopRated();
+                mProductRepository.fetchProductListTopRated();
                 showProductList();
             }
         });
         mRecentlyAddedText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProductRepository.setProductListRecent();
+                mProductRepository.fetchProductListRecent();
                 showProductList();
             }
         });
         mMostViewedText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProductRepository.setProductListPopularity();
+                mProductRepository.fetchProductListPopularity();
                 showProductList();
             }
         });
