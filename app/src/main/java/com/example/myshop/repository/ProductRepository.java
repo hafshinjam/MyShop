@@ -33,12 +33,14 @@ public class ProductRepository {
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
     private ProductService mProductService;
+
     private ProductService mCategoryService;
     Type typeCategory = new TypeToken<List<Category>>() {
     }.getType();
     Object categoryTypeAdapter = new GetCategoryDeserializer();
     private Retrofit mRetrofitCategory= RetrofitInstance.getInstance(typeCategory,categoryTypeAdapter,CATEGORIES_PATH);
 
+    private Product mProductToShow;
 
     public static ProductRepository getInstance() {
         if (sProductRepository == null) {
@@ -155,5 +157,13 @@ public class ProductRepository {
 
     public MutableLiveData<List<Category>> getCategoriesList() {
         return mCategoriesList;
+    }
+
+    public Product getProductToShow() {
+        return mProductToShow;
+    }
+
+    public void setProductToShow(Product productToShow) {
+        mProductToShow = productToShow;
     }
 }

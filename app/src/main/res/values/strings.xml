@@ -14,4 +14,9 @@
     <string name="TopRated">بالاترین امتیاز</string>
     <string name="New">محصولات جدید</string>
     <string name="category_image">Category Image</string>
+    <string name="Description">توضیحات</string>
+    <string name="product_description_tag">product Description</string>
+    <string name="product_image">product Image</string>
+    <string name="price">قیمت</string>
+    <string name="add_to_cart">افزودن به سبد خرید</string>
 </resources>

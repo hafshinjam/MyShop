@@ -1,6 +1,7 @@
 package com.example.myshop.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myshop.Model.Product;
 import com.example.myshop.R;
+import com.example.myshop.View.Activity.ProductViewActivity;
+import com.example.myshop.repository.ProductRepository;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class productAdapter extends RecyclerView.Adapter<productAdapter.ProductHolder> {
     List<Product> mProducts;
+    private ProductRepository mProductRepository;
     Context mContext;
 
     public productAdapter(List<Product> products, Context context) {
         mContext = context.getApplicationContext();
         mProducts = products;
+        mProductRepository= ProductRepository.getInstance();
     }
 
     @NonNull
@@ -60,6 +65,10 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.ProductH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mProductRepository.setProductToShow(mProduct);
+                    Intent intent = ProductViewActivity.newIntent(mContext);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intent);
                 }
             });
         }
