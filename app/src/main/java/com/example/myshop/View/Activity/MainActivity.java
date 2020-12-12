@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initView();
         setListeners();
+
     }
 
     private void initView() {
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        mNavigationView.setSelectedItemId(R.id.home_fragment);
     }
 
 }

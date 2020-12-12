@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.myshop.Model.Product;
 import com.example.myshop.R;
 import com.example.myshop.repository.ProductRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,16 +72,24 @@ public class ProductListFragment extends Fragment {
         mProductListLive.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
-                initAdapter(products);
+//                if (products.size()==0)
+                initAdapter();
+                mProductRecyclerView.setVisibility(View.VISIBLE);
             }
         });
     }
 
-    private void initAdapter(List<Product> products) {
-        if (mProductAdapter == null) {
-            mProductAdapter = new productAdapter(products, getContext());
-            mProductRecyclerView.setAdapter(mProductAdapter);
-        }
+    private void initAdapter() {
+//      if (mProductAdapter == null) {
+          mProductAdapter = new productAdapter(mProductListLive.getValue(), getContext());
+          mProductRecyclerView.setAdapter(mProductAdapter);
+
         mProductAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mProductRepository.getProductList().setValue(new ArrayList<Product>());
     }
 }

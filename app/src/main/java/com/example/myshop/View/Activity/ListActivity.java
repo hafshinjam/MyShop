@@ -24,9 +24,9 @@ public class ListActivity extends AppCompatActivity {
 
     private void setFragment() {
 
-            getSupportFragmentManager()
-                    .beginTransaction()
-            .replace(R.id.listContainer, ProductListFragment.newInstance(),"productListFragment")
-            .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.listContainer, ProductListFragment.newInstance(), "productListFragment")
+                .commit();
     }
 }

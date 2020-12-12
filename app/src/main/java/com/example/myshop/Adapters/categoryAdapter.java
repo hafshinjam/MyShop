@@ -2,6 +2,7 @@ package com.example.myshop.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
 
     public categoryAdapter(List<Category> categories, Context context) {
         mContext = context.getApplicationContext();
-        mProductRepository= ProductRepository.getInstance();
+        mProductRepository = ProductRepository.getInstance();
         mCategories = new ArrayList<>();
         mCategories = categories;
     }
@@ -76,6 +77,7 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
                 public void onClick(View v) {
                     //todo there is bug here should find another way
                     mProductRepository.fetchCategoryItemList(mCategory.getCategoryID());
+                    Log.d("cat_tag",mCategory.getCategoryID());
                     Intent intent = ListActivity.newIntent(mContext);
                     intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(intent);

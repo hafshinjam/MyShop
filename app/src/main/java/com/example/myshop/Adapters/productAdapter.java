@@ -27,7 +27,7 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.ProductH
     public productAdapter(List<Product> products, Context context) {
         mContext = context.getApplicationContext();
         mProducts = products;
-        mProductRepository= ProductRepository.getInstance();
+        mProductRepository = ProductRepository.getInstance();
     }
 
     @NonNull

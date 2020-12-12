@@ -18,15 +18,15 @@ public class GetCategoryDeserializer implements JsonDeserializer<List<Category>>
     public List<Category> deserialize(JsonElement json,
                                       Type typeOfT,
                                       JsonDeserializationContext context) throws JsonParseException {
-       /* JsonObject body = json.getAsJsonObject();*/
+        /* JsonObject body = json.getAsJsonObject();*/
         List<Category> categoryList = new ArrayList<>();
         JsonArray categoryArray = json.getAsJsonArray();
-        for (int i = 0; i <categoryArray.size() ; i++) {
+        for (int i = 0; i < categoryArray.size(); i++) {
             JsonObject categoryObject = categoryArray.get(i).getAsJsonObject();
             String id = categoryObject.get("id").getAsString();
             String categoryName = categoryObject.get("name").getAsString();
             String photoUri = getCategoryPhotoUriFromJson(categoryObject.get("image").getAsJsonObject());
-            Category  category= new Category(categoryName,id,photoUri);
+            Category category = new Category(categoryName, id, photoUri);
             categoryList.add(category);
         }
         return categoryList;

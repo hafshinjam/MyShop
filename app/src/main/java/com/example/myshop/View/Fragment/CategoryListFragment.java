@@ -74,6 +74,7 @@ public class CategoryListFragment extends Fragment {
             @Override
             public void onChanged(List<Category> categories) {
                 initAdapters(categories);
+                mRecyclerView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -83,6 +84,6 @@ public class CategoryListFragment extends Fragment {
             mCategoryAdapter = new categoryAdapter(list, getActivity());
             mRecyclerView.setAdapter(mCategoryAdapter);
         }
-            mCategoryAdapter.notifyDataSetChanged();
+        mCategoryAdapter.notifyDataSetChanged();
     }
 }

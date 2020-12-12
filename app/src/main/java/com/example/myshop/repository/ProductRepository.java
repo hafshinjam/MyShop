@@ -1,5 +1,6 @@
 package com.example.myshop.repository;
 
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -16,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,12 +35,13 @@ public class ProductRepository {
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
     private ProductService mProductService;
+    private HashMap<Product, Integer> mProductsCart;
 
     private ProductService mCategoryService;
     Type typeCategory = new TypeToken<List<Category>>() {
     }.getType();
     Object categoryTypeAdapter = new GetCategoryDeserializer();
-    private Retrofit mRetrofitCategory= RetrofitInstance.getInstance(typeCategory,categoryTypeAdapter,CATEGORIES_PATH);
+    private Retrofit mRetrofitCategory = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);
 
     private Product mProductToShow;
 
@@ -61,17 +64,17 @@ public class ProductRepository {
         Map<String, String> OPTIONS = QUERY_OPTIONS;
         OPTIONS.put("orderby", "date");
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
-         call.enqueue(new Callback<List<Product>>() {
-             @Override
-             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                 mProductList.setValue(response.body());
-             }
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                mProductList.setValue(response.body());
+            }
 
-             @Override
-             public void onFailure(Call<List<Product>> call, Throwable t) {
-                 Log.d("product_recent_fetched",t.toString(),t);
-             }
-         });
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("product_recent_fetched", t.toString(), t);
+            }
+        });
 
 
     }
@@ -81,17 +84,17 @@ public class ProductRepository {
         OPTIONS.put("orderby", "popularity");
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
 
-         call.enqueue(new Callback<List<Product>>() {
-             @Override
-             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                 mProductList.setValue(response.body());
-             }
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                mProductList.setValue(response.body());
+            }
 
-             @Override
-             public void onFailure(Call<List<Product>> call, Throwable t) {
-                 Log.d("product_popular_fetched",t.toString(),t);
-             }
-         });
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("product_popular_fetched", t.toString(), t);
+            }
+        });
 
 
     }
@@ -101,17 +104,17 @@ public class ProductRepository {
         OPTIONS.put("orderby", "rating");
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
 
-           call.enqueue(new Callback<List<Product>>() {
-                @Override
-                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                    mProductList.setValue(response.body());
-                }
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                mProductList.setValue(response.body());
+            }
 
-                @Override
-                public void onFailure(Call<List<Product>> call, Throwable t) {
-                    Log.d("product_topRated_fetched",t.toString(),t);
-                }
-            });
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("product_topRated_fetched", t.toString(), t);
+            }
+        });
     }
 
     public void fetchCategoryItemList(String categoryID) {
@@ -119,21 +122,21 @@ public class ProductRepository {
         OPTIONS.put("category", categoryID);
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
 
-           call.enqueue(new Callback<List<Product>>() {
-               @Override
-               public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                   mProductList.setValue(response.body());
-               }
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                mProductList.setValue(response.body());
+            }
 
-               @Override
-               public void onFailure(Call<List<Product>> call, Throwable t) {
-                   Log.d("category_product_fetched",t.toString(),t);
-               }
-           });
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("category_product_fetched", t.toString(), t);
+            }
+        });
     }
 
     public void fetchCategoriesList() {
-      /*  Retrofit categoryRetrofit = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);*/
+        /*  Retrofit categoryRetrofit = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);*/
         mCategoryService = mRetrofitCategory.create(ProductService.class);
         Call<List<Category>> call = mCategoryService.listCategories(QUERY_OPTIONS);
 
@@ -141,12 +144,12 @@ public class ProductRepository {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 mCategoriesList.setValue(response.body());
-                Log.d("category_fetched",response.toString());
+                Log.d("category_fetched", response.toString());
             }
 
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d("category_fetched",t.toString(),t);
+                Log.d("category_fetched", t.toString(), t);
             }
         });
     }
@@ -166,4 +169,29 @@ public class ProductRepository {
     public void setProductToShow(Product productToShow) {
         mProductToShow = productToShow;
     }
+
+    public HashMap<Product, Integer> getProductsCart() {
+        return mProductsCart;
+    }
+
+    public void addProductToCart(Product product) {
+        if (mProductsCart.get(product) != null)
+            mProductsCart.put(product, mProductsCart.get(product) + 1);
+        else
+            mProductsCart.put(product, 1);
+    }
+
+    public void removeProductToCart(Product product) {
+        if (mProductsCart.containsKey(product))
+            if (mProductsCart.get(product) > 1)
+                mProductsCart.put(product, mProductsCart.get(product) - 1);
+            else mProductsCart.remove(product);
+
+    }
+
+    public void clearProductCart() {
+        mProductsCart.clear();
+    }
+
+
 }

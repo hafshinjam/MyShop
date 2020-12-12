@@ -41,7 +41,7 @@ public class ProductViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mProductRepository = ProductRepository.getInstance();
-        mProduct=mProductRepository.getProductToShow();
+        mProduct = mProductRepository.getProductToShow();
     }
 
     @Override
@@ -55,15 +55,15 @@ public class ProductViewFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        mProductImage =view.findViewById(R.id.productImageView);
+        mProductImage = view.findViewById(R.id.productImageView);
         Picasso.get().load(mProduct.getPhotoUriList().get(0))
                 .placeholder(R.drawable.ic_product)
                 .into(mProductImage);
 
-        mProductName=view.findViewById(R.id.productNameTextView);
+        mProductName = view.findViewById(R.id.productNameTextView);
         mProductName.setText(mProduct.getName());
 
-        mProductDescription=view.findViewById(R.id.productDescriptionTextView);
+        mProductDescription = view.findViewById(R.id.productDescriptionTextView);
         mProductDescription.setText(mProduct.getDescription());
 
         mProductPrice = view.findViewById(R.id.productPriceTextView);
@@ -75,7 +75,7 @@ public class ProductViewFragment extends Fragment {
         mAddToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mProductRepository.addProductToCart(mProduct);
             }
         });
     }
