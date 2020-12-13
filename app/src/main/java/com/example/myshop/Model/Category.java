@@ -1,6 +1,7 @@
 package com.example.myshop.Model;
 
 public class Category {
+
     private String mCategoryID;
     private String mCategoryName;
     private String mPhotoUri;

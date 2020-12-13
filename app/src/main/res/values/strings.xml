@@ -18,5 +18,8 @@
     <string name="product_description_tag">product Description</string>
     <string name="product_image">product Image</string>
     <string name="price">قیمت</string>
-    <string name="add_to_cart">افزودن به سبد خرید</string>
+    <string name="add_to_cart">افزودن به</string>
+    <string name="number">تعداد</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
 </resources>
