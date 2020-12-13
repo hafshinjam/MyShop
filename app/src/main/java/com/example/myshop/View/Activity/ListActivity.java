@@ -1,6 +1,7 @@
 package com.example.myshop.View.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
@@ -9,8 +10,11 @@ import android.os.Bundle;
 
 import com.example.myshop.R;
 import com.example.myshop.View.Fragment.ProductListFragment;
+import com.example.myshop.databinding.ActivityListBinding;
 
 public class ListActivity extends AppCompatActivity {
+    private ActivityListBinding mBinding;
+
     public static Intent newIntent(Context context) {
         return new Intent(context, ListActivity.class);
     }
@@ -18,7 +22,8 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        mBinding = DataBindingUtil.
+                setContentView(this, R.layout.activity_list);
         setFragment();
     }
 

@@ -1,37 +1,33 @@
 package com.example.myshop.View.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.myshop.View.Fragment.CartFragment;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
+import com.example.myshop.R;
 import com.example.myshop.View.Fragment.AccountManagementFragment;
+import com.example.myshop.View.Fragment.CartFragment;
 import com.example.myshop.View.Fragment.CategoryListFragment;
 import com.example.myshop.View.Fragment.HomeFragment;
-import com.example.myshop.R;
+import com.example.myshop.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-    private BottomNavigationView mNavigationView;
+    private ActivityMainBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initView();
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setListeners();
 
     }
 
-    private void initView() {
-        mNavigationView = findViewById(R.id.bottom_navigation);
-        mNavigationView.setSelectedItemId(R.id.home_fragment);
-    }
-
     private void setListeners() {
-        mNavigationView.setOnNavigationItemSelectedListener(
+        mBinding.bottomNavigation.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -65,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-        mNavigationView.setSelectedItemId(R.id.home_fragment);
+        mBinding.bottomNavigation.setSelectedItemId(R.id.home_fragment);
     }
 
 }
