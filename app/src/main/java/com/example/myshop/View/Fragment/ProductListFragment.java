@@ -2,6 +2,7 @@ package com.example.myshop.View.Fragment;
 
 import android.os.Bundle;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -16,18 +17,15 @@ import android.view.ViewGroup;
 import com.example.myshop.Adapters.productAdapter;
 import com.example.myshop.Model.Product;
 import com.example.myshop.R;
+import com.example.myshop.databinding.FragmentListBinding;
 import com.example.myshop.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProductListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ProductListFragment extends Fragment {
-    private RecyclerView mProductRecyclerView;
+    private FragmentListBinding mBinding;
     private productAdapter mProductAdapter;
     private LiveData<List<Product>> mProductListLive;
     private ProductRepository mProductRepository;
@@ -57,33 +55,25 @@ public class ProductListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
-        findViews(view);
-        mProductRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        return view;
-
-    }
-
-    private void findViews(View view) {
-        mProductRecyclerView = view.findViewById(R.id.list);
+        mBinding = DataBindingUtil.
+                inflate(inflater, R.layout.fragment_list, container, false);
+        mBinding.list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        return mBinding.getRoot();
     }
 
     private void registerObservers() {
         mProductListLive.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
-//                if (products.size()==0)
                 initAdapter();
-                mProductRecyclerView.setVisibility(View.VISIBLE);
+                mBinding.list.setVisibility(View.VISIBLE);
             }
         });
     }
 
     private void initAdapter() {
-//      if (mProductAdapter == null) {
-          mProductAdapter = new productAdapter(mProductListLive.getValue(), getContext());
-          mProductRecyclerView.setAdapter(mProductAdapter);
-
+        mProductAdapter = new productAdapter(mProductListLive.getValue(), getContext());
+        mBinding.list.setAdapter(mProductAdapter);
         mProductAdapter.notifyDataSetChanged();
     }
 
