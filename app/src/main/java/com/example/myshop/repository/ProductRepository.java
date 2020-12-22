@@ -34,6 +34,8 @@ public class ProductRepository {
     private static ProductRepository sProductRepository;
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
+    private Product mProductToShow;
+
     private ProductService mProductService;
     private HashMap<Product, Integer> mProductsCart;
 
@@ -43,7 +45,6 @@ public class ProductRepository {
     Object categoryTypeAdapter = new GetCategoryDeserializer();
     private Retrofit mRetrofitCategory = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);
 
-    private Product mProductToShow;
 
     public static ProductRepository getInstance() {
         if (sProductRepository == null) {
@@ -168,6 +169,7 @@ public class ProductRepository {
 
     public void setProductToShow(Product productToShow) {
         mProductToShow = productToShow;
+        Log.d("repository",productToShow.getName());
     }
 
     public HashMap<Product, Integer> getProductsCart() {

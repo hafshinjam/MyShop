@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.myshop.viewModel.ProductViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/productViewLayout"
         android:layout_width="match_parent"
@@ -32,11 +39,11 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
+            android:text="@{viewModel.productTitle}"
             app:layout_constraintBottom_toTopOf="@+id/productDescriptionTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/productImageView"
-            tools:text="@string/product_name" />
+            app:layout_constraintTop_toBottomOf="@+id/productImageView" />
 
         <TextView
             android:id="@+id/productDescriptionTitle"
@@ -59,7 +66,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/product_description_tag"
+            android:text="@{viewModel.productDescription}"
             app:layout_constraintBottom_toTopOf="@+id/productPriceTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/productDescriptionTitle"
@@ -84,11 +91,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
+            android:text="@{viewModel.productPrice}"
             app:layout_constraintBottom_toTopOf="@+id/addToCartButton"
             app:layout_constraintEnd_toEndOf="@+id/productDescriptionTextView"
             app:layout_constraintStart_toEndOf="@+id/priceTagTextView"
-            app:layout_constraintTop_toBottomOf="@+id/productDescriptionTextView"
-            tools:text="price" />
+            app:layout_constraintTop_toBottomOf="@+id/productDescriptionTextView" />
 
         <TextView
             android:id="@+id/productCount"
