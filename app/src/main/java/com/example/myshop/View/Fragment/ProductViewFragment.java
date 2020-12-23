@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myshop.Model.Product;
 import com.example.myshop.R;
-import com.example.myshop.viewModel.ProductViewModel;
 import com.example.myshop.databinding.FragmentProductViewBinding;
 import com.example.myshop.repository.ProductRepository;
+import com.example.myshop.viewModel.ProductViewModel;
 
 
 public class ProductViewFragment extends Fragment {
