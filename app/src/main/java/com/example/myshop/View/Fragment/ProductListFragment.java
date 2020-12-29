@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -60,7 +62,70 @@ public class ProductListFragment extends Fragment {
                 inflate(inflater, R.layout.fragment_list, container, false);
         mBinding.setViewModel(mProductListViewModel);
         mBinding.list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        initViews();
+        setListeners();
         return mBinding.getRoot();
+    }
+
+    private void initViews() {
+        ArrayAdapter<CharSequence> sortMethod =
+                ArrayAdapter.
+                        createFromResource(getActivity(), R.array.sortMethod,
+                                android.R.layout.simple_spinner_item);
+        sortMethod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mBinding
+                .SortSpinner
+                .setAdapter(sortMethod);
+        ArrayAdapter<CharSequence> sortOrder =
+                ArrayAdapter.
+                        createFromResource(getActivity(), R.array.sortOrder,
+                                android.R.layout.simple_spinner_item);
+        sortMethod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mBinding
+                .AscDscSpinner
+                .setAdapter(sortOrder);
+    }
+
+    private void setListeners() {
+        mBinding.SortSpinner
+                .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                        switch (position) {
+                            case 0:
+                                mProductListViewModel.setSortModel("new");
+                                mProductListViewModel.fetchProductsSortDate();
+                                break;
+                            case 1:
+                                mProductListViewModel.setSortModel("price");
+                                mProductListViewModel.fetchProductsSortPrice();
+                                break;
+                            case 2:
+                                mProductListViewModel.setSortModel("popular");
+                                mProductListViewModel.fetchProductsSortPopularity();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+        mBinding.AscDscSpinner
+                .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        boolean order;
+                        order = position == 0;
+                        mProductListViewModel.setSortOrder(order);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
     }
 
     private void registerObservers() {
@@ -89,6 +154,8 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mProductRepository.getProductList().setValue(new ArrayList<Product>());
+        mProductRepository
+                .getProductList()
+                .setValue(new ArrayList<Product>());
     }
 }

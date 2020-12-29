@@ -1,7 +1,6 @@
 package com.example.myshop.View.Fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,8 @@ import android.view.ViewGroup;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myshop.Adapters.categoryAdapter;
 import com.example.myshop.Model.Category;
@@ -54,6 +51,8 @@ public class CategoryListFragment extends Fragment {
                 inflate(inflater, R.layout.fragment_list, container, false);
         //  findViews(view);
         mBinding.list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.AscDscSpinner.setVisibility(View.GONE);
+        mBinding.SortSpinner.setVisibility(View.GONE);
         return mBinding.getRoot();
     }
 

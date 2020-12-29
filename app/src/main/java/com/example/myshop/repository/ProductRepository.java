@@ -1,9 +1,7 @@
 package com.example.myshop.repository;
 
-import android.content.Intent;
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.myshop.Model.Category;
@@ -14,9 +12,7 @@ import com.example.myshop.Remote.ProductService;
 import com.example.myshop.Remote.RetrofitInstance;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,16 +31,18 @@ public class ProductRepository {
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
     private Product mProductToShow;
+    private Map<String,String> SortOrder;
+    private Map<String,String> SortMethod;
 
     private ProductService mProductService;
-    private HashMap<Product, Integer> mProductsCart;
 
+    private static HashMap<Product, Integer> mProductsCart;
     private ProductService mCategoryService;
+
     Type typeCategory = new TypeToken<List<Category>>() {
     }.getType();
     Object categoryTypeAdapter = new GetCategoryDeserializer();
     private Retrofit mRetrofitCategory = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);
-
 
     public static ProductRepository getInstance() {
         if (sProductRepository == null) {
@@ -59,11 +57,22 @@ public class ProductRepository {
         Object typeAdapter = new GetProductDeserializer();
         Retrofit retrofit = RetrofitInstance.getInstance(type, typeAdapter, PRODUCTS_PATH);
         mProductService = retrofit.create(ProductService.class);
+        SortOrder= new HashMap<>();
+        SortOrder.put("order","desc");
+    }
+
+    public void setSortOrder(Map<String, String> sortOrder) {
+        SortOrder = sortOrder;
+    }
+
+    public void setSortMethod(Map<String, String> sortMethod) {
+        SortMethod = sortMethod;
     }
 
     public void fetchProductListRecent() {
-        Map<String, String> OPTIONS = QUERY_OPTIONS;
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("orderby", "date");
+        OPTIONS.putAll(SortOrder);
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
         call.enqueue(new Callback<List<Product>>() {
             @Override
@@ -81,8 +90,9 @@ public class ProductRepository {
     }
 
     public void fetchProductListPopularity() {
-        Map<String, String> OPTIONS = QUERY_OPTIONS;
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("orderby", "popularity");
+        OPTIONS.putAll(SortOrder);
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
 
         call.enqueue(new Callback<List<Product>>() {
@@ -101,8 +111,9 @@ public class ProductRepository {
     }
 
     public void fetchProductListTopRated() {
-        Map<String, String> OPTIONS = QUERY_OPTIONS;
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("orderby", "rating");
+        OPTIONS.putAll(SortOrder);
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
 
         call.enqueue(new Callback<List<Product>>() {
@@ -119,8 +130,10 @@ public class ProductRepository {
     }
 
     public void fetchCategoryItemList(String categoryID) {
-        Map<String, String> OPTIONS = QUERY_OPTIONS;
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("category", categoryID);
+        OPTIONS.putAll(SortOrder);
+        OPTIONS.put("per_page", "20");
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
 
         call.enqueue(new Callback<List<Product>>() {
@@ -139,7 +152,10 @@ public class ProductRepository {
     public void fetchCategoriesList() {
         /*  Retrofit categoryRetrofit = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);*/
         mCategoryService = mRetrofitCategory.create(ProductService.class);
-        Call<List<Category>> call = mCategoryService.listCategories(QUERY_OPTIONS);
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
+
+        OPTIONS.put("per_page", "20");
+        Call<List<Category>> call = mCategoryService.listCategories(OPTIONS);
 
         call.enqueue(new Callback<List<Category>>() {
             @Override
@@ -169,30 +185,16 @@ public class ProductRepository {
 
     public void setProductToShow(Product productToShow) {
         mProductToShow = productToShow;
-        Log.d("repository",productToShow.getName());
+        Log.d("repository", productToShow.getName());
     }
 
     public HashMap<Product, Integer> getProductsCart() {
         return mProductsCart;
     }
 
-    public void addProductToCart(Product product) {
-        if (mProductsCart.get(product) != null)
-            mProductsCart.put(product, mProductsCart.get(product) + 1);
-        else
-            mProductsCart.put(product, 1);
-    }
+    public void updateProductToCart(Product product, int count) {
+        mProductsCart.put(product, count);
 
-    public void removeProductToCart(Product product) {
-        if (mProductsCart.containsKey(product))
-            if (mProductsCart.get(product) > 1)
-                mProductsCart.put(product, mProductsCart.get(product) - 1);
-            else mProductsCart.remove(product);
-
-    }
-
-    public void clearProductCart() {
-        mProductsCart.clear();
     }
 
 

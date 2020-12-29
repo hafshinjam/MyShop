@@ -19,11 +19,7 @@ import com.example.myshop.viewModel.ProductViewModel;
 public class ProductViewFragment extends Fragment {
     private ProductRepository mProductRepository;
     private Product mProduct;
-   /* private TextView mProductName;
-    private TextView mProductDescription;
-    private TextView mProductPrice;
-    private ImageView mProductImage;
-    private Button mAddToCartButton;*/
+
 
     private FragmentProductViewBinding mProductViewBinding;
     public ProductViewModel mViewModel;
@@ -56,8 +52,7 @@ public class ProductViewFragment extends Fragment {
                 .inflate(inflater, R.layout.fragment_product_view, container, false);
         mProductViewBinding.setViewModel(mViewModel);
         mViewModel.setProductPicture(mProductViewBinding.productImageView);
-      /*  initViews(view);
-        setListeners();*/
+
         return mProductViewBinding.getRoot();
     }
 
