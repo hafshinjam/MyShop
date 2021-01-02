@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-        mProductRepository = ProductRepository.getInstance();
+        mProductRepository = ProductRepository.getInstance(getContext());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mProductRepository.fetchProductListTopRated();
+                        mProductRepository.fetchProductListTopRated(1);
                         showProductList();
                     }
                 });
@@ -58,14 +58,14 @@ public class HomeFragment extends Fragment {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mProductRepository.fetchProductListRecent();
+                        mProductRepository.fetchProductListRecent(1);
                         showProductList();
                     }
                 });
         mBinding.mostViewed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProductRepository.fetchProductListPopularity();
+                mProductRepository.fetchProductListPopularity(1);
                 showProductList();
             }
         });

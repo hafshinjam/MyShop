@@ -21,7 +21,7 @@ public class ProductListViewModel extends AndroidViewModel {
 
     public ProductListViewModel(@NonNull Application application) {
         super(application);
-        mRepository = ProductRepository.getInstance();
+        mRepository = ProductRepository.getInstance(getApplication());
         mProductListLiveData = mRepository.getProductList();
         SortOrder = new HashMap<>();
         SortMethod = new HashMap<>();

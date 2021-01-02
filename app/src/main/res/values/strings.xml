@@ -18,10 +18,15 @@
     <string name="product_description_tag">product Description</string>
     <string name="product_image">product Image</string>
     <string name="price">قیمت</string>
-    <string name="add_to_cart">افزودن به</string>
+    <string name="update_cart">به روز کردن</string>
     <string name="number">تعداد</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
+    <string name="Cart">سبد خرید</string>
+    <string name="total_cart_value">مجموع قیمت سبد</string>
+    <string name="continue_shopping_process">ادامه فرآیند خرید</string>
+    <string name="cart_item_photo">cart item photo</string>
+    <string name="guarantee">گارانتی اصالت و سلامت</string>
 
     <string-array name="sortMethod">
         <item>جدیدترین</item>

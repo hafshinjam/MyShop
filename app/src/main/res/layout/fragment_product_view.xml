@@ -141,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="256dp"
-            android:text="@string/add_to_cart"
+            android:text="@string/update_cart"
             app:icon="@drawable/ic_cart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/plusButton" />

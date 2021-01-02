@@ -37,7 +37,7 @@ public class CategoryListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRepository = ProductRepository.getInstance();
+        mRepository = ProductRepository.getInstance(getContext());
         mCategoryListLive = mRepository.getCategoriesList();
         registerObservers();
         mRepository.fetchCategoriesList();

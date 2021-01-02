@@ -38,7 +38,7 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
 
     public categoryAdapter(List<Category> categories, Context context) {
         mContext = context.getApplicationContext();
-        mProductRepository = ProductRepository.getInstance();
+        mProductRepository = ProductRepository.getInstance(context);
         mCategories = new ArrayList<>();
         mCategories = categories;
     }
@@ -76,7 +76,7 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
                 @Override
                 public void onClick(View v) {
                     //todo there is bug here should find another way
-                    mProductRepository.fetchCategoryItemList(mCategory.getCategoryID());
+                    mProductRepository.fetchCategoryItemList(mCategory.getCategoryID(),1);
                     Log.d("cat_tag", mCategory.getCategoryID());
                     Intent intent = ListActivity.newIntent(mContext);
                     intent.setFlags(FLAG_ACTIVITY_NEW_TASK);

@@ -1,5 +1,7 @@
 package com.example.myshop.repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -22,8 +24,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static com.example.myshop.Remote.NetworkParameters.CATEGORIES_PATH;
-import static com.example.myshop.Remote.NetworkParameters.PRODUCTS_PATH;
+import static com.example.myshop.Remote.NetworkParameters.BASE_PATH;
 import static com.example.myshop.Remote.RetrofitInstance.QUERY_OPTIONS;
 
 public class ProductRepository {
@@ -31,34 +32,42 @@ public class ProductRepository {
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
     private Product mProductToShow;
-    private Map<String,String> SortOrder;
-    private Map<String,String> SortMethod;
+    private Map<String, String> SortOrder;
+    private Map<String, String> SortMethod;
 
     private ProductService mProductService;
+    private SharedPreferences mPreferences;
+    private Context mContext;
 
-    private static HashMap<Product, Integer> mProductsCart;
+    public static HashMap<Product, Integer> mProductsCart;
     private ProductService mCategoryService;
 
     Type typeCategory = new TypeToken<List<Category>>() {
     }.getType();
     Object categoryTypeAdapter = new GetCategoryDeserializer();
-    private Retrofit mRetrofitCategory = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);
+    private Retrofit mRetrofitCategory = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, BASE_PATH);
 
-    public static ProductRepository getInstance() {
+    public static ProductRepository getInstance(Context context) {
         if (sProductRepository == null) {
-            sProductRepository = new ProductRepository();
+            sProductRepository = new ProductRepository(context);
         }
         return sProductRepository;
     }
 
-    public ProductRepository() {
+    public ProductRepository(Context context) {
+        mContext = context.getApplicationContext();
+        mPreferences = mContext.
+                getSharedPreferences("com.example.myshop.Cart", Context.MODE_PRIVATE);
         Type type = new TypeToken<List<Product>>() {
         }.getType();
         Object typeAdapter = new GetProductDeserializer();
-        Retrofit retrofit = RetrofitInstance.getInstance(type, typeAdapter, PRODUCTS_PATH);
+        Retrofit retrofit = RetrofitInstance.getInstance(type, typeAdapter, BASE_PATH);
         mProductService = retrofit.create(ProductService.class);
-        SortOrder= new HashMap<>();
-        SortOrder.put("order","desc");
+        if (mProductsCart == null)
+            mProductsCart = new HashMap<>();
+        SortMethod = new HashMap<>();
+        SortOrder = new HashMap<>();
+        SortOrder.put("order", "desc");
     }
 
     public void setSortOrder(Map<String, String> sortOrder) {
@@ -69,10 +78,11 @@ public class ProductRepository {
         SortMethod = sortMethod;
     }
 
-    public void fetchProductListRecent() {
+    public void fetchProductListRecent(int page) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("orderby", "date");
         OPTIONS.putAll(SortOrder);
+        OPTIONS.put("page", String.valueOf(page));
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
         call.enqueue(new Callback<List<Product>>() {
             @Override
@@ -89,10 +99,11 @@ public class ProductRepository {
 
     }
 
-    public void fetchProductListPopularity() {
+    public void fetchProductListPopularity(int page) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("orderby", "popularity");
         OPTIONS.putAll(SortOrder);
+        OPTIONS.put("page", String.valueOf(page));
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
 
         call.enqueue(new Callback<List<Product>>() {
@@ -110,9 +121,10 @@ public class ProductRepository {
 
     }
 
-    public void fetchProductListTopRated() {
+    public void fetchProductListTopRated(int page) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("orderby", "rating");
+        OPTIONS.put("page", String.valueOf(page));
         OPTIONS.putAll(SortOrder);
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
 
@@ -129,11 +141,12 @@ public class ProductRepository {
         });
     }
 
-    public void fetchCategoryItemList(String categoryID) {
+    public void fetchCategoryItemList(String categoryID, int page) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("category", categoryID);
         OPTIONS.putAll(SortOrder);
-        OPTIONS.put("per_page", "20");
+        OPTIONS.put("page", String.valueOf(page));
+        /*  OPTIONS.put("per_page", "20");*/
         Call<List<Product>> call = mProductService.listProducts(OPTIONS);
 
         call.enqueue(new Callback<List<Product>>() {
@@ -150,11 +163,10 @@ public class ProductRepository {
     }
 
     public void fetchCategoriesList() {
-        /*  Retrofit categoryRetrofit = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, CATEGORIES_PATH);*/
         mCategoryService = mRetrofitCategory.create(ProductService.class);
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
 
-        OPTIONS.put("per_page", "20");
+        /*OPTIONS.put("per_page", "20");*/
         Call<List<Category>> call = mCategoryService.listCategories(OPTIONS);
 
         call.enqueue(new Callback<List<Category>>() {
@@ -193,9 +205,22 @@ public class ProductRepository {
     }
 
     public void updateProductToCart(Product product, int count) {
-        mProductsCart.put(product, count);
 
+        SharedPreferences.Editor editor = mPreferences.edit();
+        if (count != 0)
+            editor.putInt(product.getId(), count);
+        else {
+            if (mPreferences.contains(product.getId()))
+                editor.remove(product.getId());
+        }
+        editor.apply();
     }
 
+    public int getProductCartCount(Product product) {
+        if (mPreferences.contains(product.getId())) {
+             return mPreferences.getInt(product.getId(),0);
+        } else
+            return 0;
+    }
 
 }

@@ -16,17 +16,24 @@ import com.squareup.picasso.Picasso;
 public class ProductViewModel extends AndroidViewModel {
     private Product mProduct;
     private ProductRepository mProductRepository;
-
+    private int mProductCount = 0;
 
     public ProductViewModel(@NonNull Application application) {
         super(application);
-        mProductRepository = ProductRepository.getInstance();
+        mProductRepository = ProductRepository.getInstance(getApplication());
         mProduct = mProductRepository.getProductToShow();
+        mProductCount = mProductRepository.getProductCartCount(mProduct);
     }
 
-    public void changeNumberInCart() {
-
+    public void incrementCount() {
+        mProductRepository.updateProductToCart(mProduct, ++mProductCount);
     }
+
+    public void decrementCount() {
+        if (mProductCount > 0)
+            mProductRepository.updateProductToCart(mProduct, --mProductCount);
+    }
+
 
     public String getProductTitle() {
         return mProduct.getName();
@@ -34,9 +41,9 @@ public class ProductViewModel extends AndroidViewModel {
 
     public String getProductDescription() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-          return Html.fromHtml(mProduct.getDescription(), Html.FROM_HTML_MODE_COMPACT).toString();
+            return Html.fromHtml(mProduct.getDescription(), Html.FROM_HTML_MODE_COMPACT).toString();
         } else {
-         return    Html.fromHtml(mProduct.getDescription()).toString();
+            return Html.fromHtml(mProduct.getDescription()).toString();
         }
     }
 
@@ -49,5 +56,9 @@ public class ProductViewModel extends AndroidViewModel {
                 .load(mProduct.getPhotoUriList().get(0))
                 .placeholder(R.drawable.ic_product)
                 .into(productPicture);
+    }
+
+    public int getProductCount() {
+        return mProductCount;
     }
 }

@@ -46,7 +46,7 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProductRepository = ProductRepository.getInstance();
+        mProductRepository = ProductRepository.getInstance(getContext());
         //    mProductListLive = mProductRepository.getProductList();
         mProductListViewModel = new ViewModelProvider(this)
                 .get(ProductListViewModel.class);
