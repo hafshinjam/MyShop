@@ -7,13 +7,22 @@ import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.myshop.Adapters.cartAdapter;
+import com.example.myshop.Model.Product;
 import com.example.myshop.R;
 import com.example.myshop.databinding.FragmentCartBinding;
+import com.example.myshop.viewModel.CartViewModel;
+
+import java.util.List;
 
 public class CartFragment extends Fragment {
     private FragmentCartBinding mCartBinding;
+    private CartViewModel mCartViewModel;
+    private cartAdapter mAdapter;
 
     public CartFragment() {
         // Required empty public constructor
@@ -28,7 +37,10 @@ public class CartFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mCartViewModel = new ViewModelProvider(this)
+                .get(CartViewModel.class);
+        registerListener();
+        mCartViewModel.fetchCartList();
     }
 
     @Override
@@ -37,7 +49,25 @@ public class CartFragment extends Fragment {
         // Inflate the layout for this fragment
         mCartBinding = DataBindingUtil
                 .inflate(inflater, R.layout.fragment_cart, container, false);
-        mCartBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mCartBinding.setViewModel(mCartViewModel);
+        mCartBinding.cartList.setLayoutManager(new LinearLayoutManager(getActivity()));
         return mCartBinding.getRoot();
+    }
+
+    private void registerListener() {
+        mCartViewModel.getCartListLiveData()
+                .observe(this, new Observer<List<Product>>() {
+                    @Override
+                    public void onChanged(List<Product> products) {
+                        initAdapter();
+                    }
+                });
+    }
+
+    private void initAdapter() {
+        mAdapter = new cartAdapter(mCartViewModel.getCartListLiveData().getValue(), getContext());
+        mCartBinding.cartList
+                .setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 }

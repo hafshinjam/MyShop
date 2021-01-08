@@ -27,7 +27,6 @@ import java.util.List;
 public class ProductListFragment extends Fragment {
     private FragmentListBinding mBinding;
     private productAdapter mProductAdapter;
-    //    private LiveData<List<Product>> mProductListLive;
     private ProductRepository mProductRepository;
     private ProductListViewModel mProductListViewModel;
 

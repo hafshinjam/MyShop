@@ -9,10 +9,10 @@
 
         <ImageView
             android:id="@+id/cartItemPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@string/cart_item_photo"
             app:layout_constraintBottom_toBottomOf="@+id/cartItemPlus"
             app:layout_constraintEnd_toEndOf="parent"
@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/cartItemName"
-            android:layout_width="wrap_content"
+            android:layout_width="94dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -62,11 +62,12 @@
             android:id="@+id/minusButtonCartItem"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:text="@string/minus"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/cartItemName"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cartItemPrice" />
 
         <TextView
@@ -84,8 +85,9 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/plus"
-            app:layout_constraintBottom_toBottomOf="@+id/minusButtonCartItem"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cartItemCount" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

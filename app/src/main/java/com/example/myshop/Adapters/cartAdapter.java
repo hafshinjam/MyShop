@@ -77,6 +77,13 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.CartItemViewHo
                 public void onClick(View v) {
                     mRepository.
                             updateProductToCart(mProduct, (mRepository.getProductCartCount(mProduct) - 1));
+                    int count = mRepository.getProductCartCount(mProduct);
+                    if (count != 0)
+                        ItemCount.setText(String.valueOf(count));
+                    else {
+                        mCartList.remove(mProduct);
+                        notifyDataSetChanged();
+                    }
                 }
             });
         }
@@ -88,7 +95,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.CartItemViewHo
             Picasso.get().load(mProduct.getPhotoUriList().get(0))
                     .placeholder(R.drawable.ic_product)
                     .into(ItemImage);
-            ItemCount.setText(mRepository.getProductCartCount(mProduct));
+            ItemCount.setText(String.valueOf(mRepository.getProductCartCount(mProduct)));
 
         }
     }

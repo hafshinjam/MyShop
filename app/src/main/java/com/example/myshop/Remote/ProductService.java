@@ -16,6 +16,9 @@ public interface ProductService {
     @GET("products/")
     Call<List<Product>> listProducts(@QueryMap Map<String, String> options);
 
+    @GET("products/{id}/")
+    Call<Product> getProduct(@Path("id") String id , @QueryMap Map<String,String> options);
+
     @GET("products/categories/")
     Call<List<Category>> listCategories(@QueryMap Map<String, String> options);
 }
