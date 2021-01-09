@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -17,17 +18,15 @@ import com.example.myshop.Adapters.productAdapter;
 import com.example.myshop.Model.Product;
 import com.example.myshop.R;
 import com.example.myshop.databinding.FragmentListBinding;
-import com.example.myshop.repository.ProductRepository;
 import com.example.myshop.viewModel.ProductListViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class ProductListFragment extends Fragment {
     private FragmentListBinding mBinding;
     private productAdapter mProductAdapter;
-    private ProductRepository mProductRepository;
+    // private ProductRepository mProductRepository;
     private ProductListViewModel mProductListViewModel;
 
     public ProductListFragment() {
@@ -45,7 +44,7 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProductRepository = ProductRepository.getInstance(getContext());
+//        mProductRepository = ProductRepository.getInstance(getContext());
         //    mProductListLive = mProductRepository.getProductList();
         mProductListViewModel = new ViewModelProvider(this)
                 .get(ProductListViewModel.class);
@@ -54,7 +53,7 @@ public class ProductListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.
@@ -93,15 +92,12 @@ public class ProductListFragment extends Fragment {
 
                         switch (position) {
                             case 0:
-                                mProductListViewModel.setSortModel("new");
                                 mProductListViewModel.fetchProductsSortDate();
                                 break;
                             case 1:
-                                mProductListViewModel.setSortModel("price");
                                 mProductListViewModel.fetchProductsSortPrice();
                                 break;
                             case 2:
-                                mProductListViewModel.setSortModel("popular");
                                 mProductListViewModel.fetchProductsSortPopularity();
                         }
                     }
@@ -141,8 +137,7 @@ public class ProductListFragment extends Fragment {
 
     private void initAdapter() {
         mProductAdapter = new productAdapter(mProductListViewModel
-                .getProductListLiveData()
-                .getValue()
+                .getProductList()
                 , getContext());
         mBinding
                 .list
@@ -153,8 +148,6 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mProductRepository
-                .getProductList()
-                .setValue(new ArrayList<Product>());
+        mProductListViewModel.setDefaultOnDestroy();
     }
 }

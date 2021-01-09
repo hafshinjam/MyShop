@@ -75,8 +75,9 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mProductRepository.setCategoryID(mCategory.getCategoryID());
                     //todo there is bug here should find another way
-                    mProductRepository.fetchCategoryItemList(mCategory.getCategoryID(),1);
+                    mProductRepository.fetchCategoryProductList(mCategory.getCategoryID(), 1);
                     Log.d("cat_tag", mCategory.getCategoryID());
                     Intent intent = ListActivity.newIntent(mContext);
                     intent.setFlags(FLAG_ACTIVITY_NEW_TASK);

@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.example.myshop.Model.Product;
 import com.example.myshop.repository.ProductRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,23 +18,19 @@ public class ProductListViewModel extends AndroidViewModel {
     private LiveData<List<Product>> mProductListLiveData;
     private ProductRepository mRepository;
     Map<String, String> SortOrder;
-    Map<String, String> SortMethod;
 
     public ProductListViewModel(@NonNull Application application) {
         super(application);
         mRepository = ProductRepository.getInstance(getApplication());
         mProductListLiveData = mRepository.getProductList();
         SortOrder = new HashMap<>();
-        SortMethod = new HashMap<>();
     }
 
     public LiveData<List<Product>> getProductListLiveData() {
         return mProductListLiveData;
     }
-
-    public void setSortModel(String sortMethod) {
-        SortMethod.put("orderby", sortMethod);
-        mRepository.setSortMethod(SortMethod);
+    public List<Product> getProductList(){
+        return mProductListLiveData.getValue();
     }
 
     public void setSortOrder(Boolean sortOrder) {
@@ -45,13 +42,21 @@ public class ProductListViewModel extends AndroidViewModel {
     }
 
     public void fetchProductsSortPrice() {
+        mRepository.fetchProductsListByPrice(1);
     }
 
     public void fetchProductsSortDate() {
-
+        mRepository.fetchProductListRecent(1);
     }
 
     public void fetchProductsSortPopularity() {
+        mRepository.fetchProductListPopularity(1);
+    }
 
+    public void setDefaultOnDestroy() {
+        mRepository.setCategoryID(null);
+        mRepository
+                .getProductList()
+                .setValue(new ArrayList<Product>());
     }
 }

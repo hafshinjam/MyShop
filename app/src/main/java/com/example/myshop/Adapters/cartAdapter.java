@@ -69,14 +69,14 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.CartItemViewHo
                 @Override
                 public void onClick(View v) {
                     mRepository.
-                            updateProductToCart(mProduct, (mRepository.getProductCartCount(mProduct) + 1));
+                            updateProductCart(mProduct, (mRepository.getProductCartCount(mProduct) + 1));
                 }
             });
             MinusButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mRepository.
-                            updateProductToCart(mProduct, (mRepository.getProductCartCount(mProduct) - 1));
+                            updateProductCart(mProduct, (mRepository.getProductCartCount(mProduct) - 1));
                     int count = mRepository.getProductCartCount(mProduct);
                     if (count != 0)
                         ItemCount.setText(String.valueOf(count));

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.myshop.Model.Product;
 import com.example.myshop.repository.ProductRepository;

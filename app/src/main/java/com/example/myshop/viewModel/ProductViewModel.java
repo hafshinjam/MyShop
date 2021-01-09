@@ -26,12 +26,12 @@ public class ProductViewModel extends AndroidViewModel {
     }
 
     public void incrementCount() {
-        mProductRepository.updateProductToCart(mProduct, ++mProductCount);
+        mProductRepository.updateProductCart(mProduct, ++mProductCount);
     }
 
     public void decrementCount() {
         if (mProductCount > 0)
-            mProductRepository.updateProductToCart(mProduct, --mProductCount);
+            mProductRepository.updateProductCart(mProduct, --mProductCount);
     }
 
 

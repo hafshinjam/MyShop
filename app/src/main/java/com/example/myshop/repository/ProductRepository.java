@@ -34,8 +34,8 @@ public class ProductRepository {
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
     private Product mProductToShow;
+    private String categoryID;
     private Map<String, String> SortOrder;
-    private Map<String, String> SortMethod;
 
     private ProductService mProductsService;
     private ProductService mProductService;
@@ -72,7 +72,6 @@ public class ProductRepository {
         Retrofit retrofitProduct = RetrofitInstance.getInstance(productType, typeAdapterProduct, BASE_PATH);
         mProductService = retrofitProduct.create(ProductService.class);
 
-        SortMethod = new HashMap<>();
         SortOrder = new HashMap<>();
         SortOrder.put("order", "desc");
 
@@ -82,21 +81,20 @@ public class ProductRepository {
         SortOrder = sortOrder;
     }
 
-    public void setSortMethod(Map<String, String> sortMethod) {
-        SortMethod = sortMethod;
-    }
-
-    public void fetchProductListRecent(int page) {
+    public void fetchProductListRecent(int pageNumber) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("orderby", "date");
         OPTIONS.putAll(SortOrder);
-        OPTIONS.put("page", String.valueOf(page));
+        OPTIONS.put("page", String.valueOf(pageNumber));
+        if (categoryID != null) {
+            OPTIONS.put("category", categoryID);
+        }
         Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 mProductList.setValue(response.body());
-                Log.d("product_recent_fetched", String.valueOf(response.body().size()));
+                Log.d("product_recent_fetched", "recent");
             }
 
             @Override
@@ -108,17 +106,21 @@ public class ProductRepository {
 
     }
 
-    public void fetchProductListPopularity(int page) {
+    public void fetchProductListPopularity(int pageNumber) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("orderby", "popularity");
         OPTIONS.putAll(SortOrder);
-        OPTIONS.put("page", String.valueOf(page));
+        OPTIONS.put("page", String.valueOf(pageNumber));
+        if (categoryID != null) {
+            OPTIONS.put("category", categoryID);
+        }
         Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
 
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 mProductList.setValue(response.body());
+                Log.d("product_recent_fetched", "popular");
             }
 
             @Override
@@ -130,11 +132,39 @@ public class ProductRepository {
 
     }
 
-    public void fetchProductListTopRated(int page) {
+    public void fetchProductListTopRated(int pageNumber) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("orderby", "rating");
-        OPTIONS.put("page", String.valueOf(page));
+        OPTIONS.put("page", String.valueOf(pageNumber));
         OPTIONS.putAll(SortOrder);
+        if (categoryID != null) {
+            OPTIONS.put("category", categoryID);
+        }
+        Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
+
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                mProductList.setValue(response.body());
+                Log.d("product_recent_fetched", "top");
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("product_topRated_fetched", t.toString(), t);
+            }
+        });
+    }
+
+    public void fetchProductsListByPrice(int pageNumber) {
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
+        OPTIONS.put("orderby", "price");
+        OPTIONS.put("page", String.valueOf(pageNumber));
+        OPTIONS.putAll(SortOrder);
+        if (categoryID != null) {
+            OPTIONS.put("category", categoryID);
+        }
         Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
 
         call.enqueue(new Callback<List<Product>>() {
@@ -150,14 +180,12 @@ public class ProductRepository {
         });
     }
 
-    public void fetchCategoryItemList(String categoryID, int page) {
+    public void fetchCategoryProductList(String categoryID, int page) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
         OPTIONS.put("category", categoryID);
         OPTIONS.putAll(SortOrder);
         OPTIONS.put("page", String.valueOf(page));
-        /*  OPTIONS.put("per_page", "20");*/
         Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
-
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
@@ -175,7 +203,6 @@ public class ProductRepository {
         mCategoryService = mRetrofitCategory.create(ProductService.class);
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
 
-        /*OPTIONS.put("per_page", "20");*/
         Call<List<Category>> call = mCategoryService.listCategories(OPTIONS);
 
         call.enqueue(new Callback<List<Category>>() {
@@ -232,7 +259,7 @@ public class ProductRepository {
         });
     }
 
-    public void updateProductToCart(Product product, int count) {
+    public void updateProductCart(Product product, int count) {
 
         SharedPreferences.Editor editor = mPreferences.edit();
         if (count != 0)
@@ -257,5 +284,9 @@ public class ProductRepository {
 
     public SharedPreferences getPreferences() {
         return mPreferences;
+    }
+
+    public void setCategoryID(String categoryID) {
+        this.categoryID = categoryID;
     }
 }
