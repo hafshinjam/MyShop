@@ -29,6 +29,7 @@
     <string name="guarantee">گارانتی اصالت و سلامت</string>
 
     <string-array name="sortMethod">
+        <item>----</item>
         <item>جدیدترین</item>
         <item>قیمت</item>
         <item>پرفروشترین</item>

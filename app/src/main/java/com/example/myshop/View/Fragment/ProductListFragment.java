@@ -91,13 +91,13 @@ public class ProductListFragment extends Fragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                         switch (position) {
-                            case 0:
+                            case 1:
                                 mProductListViewModel.fetchProductsSortDate();
                                 break;
-                            case 1:
+                            case 2:
                                 mProductListViewModel.fetchProductsSortPrice();
                                 break;
-                            case 2:
+                            case 3:
                                 mProductListViewModel.fetchProductsSortPopularity();
                         }
                     }
@@ -146,8 +146,15 @@ public class ProductListFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        mProductListViewModel.getProductListLiveData().removeObservers(this);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mProductListViewModel.setDefaultOnDestroy();
+
     }
 }

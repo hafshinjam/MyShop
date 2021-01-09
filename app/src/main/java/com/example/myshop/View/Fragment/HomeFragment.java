@@ -2,6 +2,7 @@ package com.example.myshop.View.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,7 @@ public class HomeFragment extends Fragment {
                     public void onClick(View v) {
                         mProductRepository.fetchProductListTopRated(1);
                         showProductList();
+                        Log.d("click","top");
                     }
                 });
         mBinding.newArrivals
@@ -60,6 +62,7 @@ public class HomeFragment extends Fragment {
                     public void onClick(View v) {
                         mProductRepository.fetchProductListRecent(1);
                         showProductList();
+                        Log.d("click","recent");
                     }
                 });
         mBinding.mostViewed.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +70,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 mProductRepository.fetchProductListPopularity(1);
                 showProductList();
+                Log.d("click","popular");
             }
         });
     }

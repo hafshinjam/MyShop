@@ -38,7 +38,7 @@ public class ProductRepository {
     private Map<String, String> SortOrder;
 
     private ProductService mProductsService;
-    private ProductService mProductService;
+    private ProductService mSingleProductService;
     private SharedPreferences mPreferences;
     private Context mContext;
 
@@ -70,7 +70,7 @@ public class ProductRepository {
         Type productType = Product.class;
         Object typeAdapterProduct = new GetProductDeserializer();
         Retrofit retrofitProduct = RetrofitInstance.getInstance(productType, typeAdapterProduct, BASE_PATH);
-        mProductService = retrofitProduct.create(ProductService.class);
+        mSingleProductService = retrofitProduct.create(ProductService.class);
 
         SortOrder = new HashMap<>();
         SortOrder.put("order", "desc");
@@ -238,7 +238,7 @@ public class ProductRepository {
 
     public void fetchCartItem(String id) {
         Map<String, String> options = new HashMap<>(QUERY_OPTIONS);
-        Call<Product> productCall = mProductService.getProduct(id, options);
+        Call<Product> productCall = mSingleProductService.getProduct(id, options);
         productCall.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
