@@ -29,7 +29,8 @@ public class ProductListViewModel extends AndroidViewModel {
     public LiveData<List<Product>> getProductListLiveData() {
         return mProductListLiveData;
     }
-    public List<Product> getProductList(){
+
+    public List<Product> getProductList() {
         return mProductListLiveData.getValue();
     }
 
@@ -54,7 +55,10 @@ public class ProductListViewModel extends AndroidViewModel {
     }
 
     public void setDefaultOnDestroy() {
-        mRepository.setCategoryID(null);
+        mRepository
+                .setCategoryID(null);
+        mRepository
+                .setSearchText(null);
         mRepository
                 .getProductList()
                 .setValue(new ArrayList<Product>());
