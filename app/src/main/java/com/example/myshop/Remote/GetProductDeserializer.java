@@ -25,6 +25,6 @@ public class GetProductDeserializer implements JsonDeserializer<Product> {
         if (inStock.equals("instock"))
             isInStock = true;
         else isInStock = false;
-        return new Product(id,name,permalink,description,price,imageUris,isInStock);
+        return new Product(id, name, permalink, description, price, imageUris, isInStock);
     }
 }

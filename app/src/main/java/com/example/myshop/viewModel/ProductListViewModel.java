@@ -42,6 +42,11 @@ public class ProductListViewModel extends AndroidViewModel {
         mRepository.setSortOrder(SortOrder);
     }
 
+    public void search(String searchParameter) {
+        mRepository.setSearchText(searchParameter);
+        mRepository.fetchProductListRecent(1);
+    }
+
     public void fetchProductsSortPrice() {
         mRepository.fetchProductsListByPrice(1);
     }

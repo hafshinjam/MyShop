@@ -26,7 +26,6 @@ import java.util.List;
 public class ProductListFragment extends Fragment {
     private FragmentListBinding mBinding;
     private productAdapter mProductAdapter;
-    // private ProductRepository mProductRepository;
     private ProductListViewModel mProductListViewModel;
 
     public ProductListFragment() {
@@ -44,8 +43,6 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        mProductRepository = ProductRepository.getInstance(getContext());
-        //    mProductListLive = mProductRepository.getProductList();
         mProductListViewModel = new ViewModelProvider(this)
                 .get(ProductListViewModel.class);
         registerObservers();
@@ -121,6 +118,13 @@ public class ProductListFragment extends Fragment {
 
                     }
                 });
+        mBinding.buttonSearchProductList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchParameter = mBinding.editTextProductList.getText().toString();
+                mProductListViewModel.search(searchParameter);
+            }
+        });
     }
 
     private void registerObservers() {

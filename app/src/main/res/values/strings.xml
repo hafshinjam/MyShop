@@ -27,6 +27,7 @@
     <string name="continue_shopping_process">ادامه فرآیند خرید</string>
     <string name="cart_item_photo">cart item photo</string>
     <string name="guarantee">گارانتی اصالت و سلامت</string>
+    <string name="search_hint">جست و جوی محصول</string>
 
     <string-array name="sortMethod">
         <item>----</item>

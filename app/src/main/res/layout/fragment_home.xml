@@ -3,18 +3,54 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="ViewModel"
+            type="com.example.myshop.viewModel.HomeFragmentViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".View.Fragment.HomeFragment">
 
+        <EditText
+            android:id="@+id/editTextProductHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:ems="10"
+            android:hint="@string/search_hint"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/newArrivals"
+            app:layout_constraintEnd_toStartOf="@+id/searchButtonHome"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints="" />
+
+        <Button
+            android:id="@+id/searchButtonHome"
+            android:layout_width="64dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:icon="@android:drawable/ic_menu_search"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextProductHome"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editTextProductHome"
+            app:layout_constraintTop_toTopOf="@+id/editTextProductHome" />
+
         <ImageView
             android:id="@+id/newArrivals"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/new_products"
@@ -22,7 +58,7 @@
             app:layout_constraintBottom_toTopOf="@id/mostViewed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextProductHome" />
 
         <ImageView
             android:id="@+id/mostViewed"

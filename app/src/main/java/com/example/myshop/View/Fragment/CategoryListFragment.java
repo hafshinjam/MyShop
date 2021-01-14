@@ -18,7 +18,7 @@ import com.example.myshop.databinding.FragmentListBinding;
 import com.example.myshop.repository.ProductRepository;
 
 import java.util.List;
-
+//todo implement ViewModel for this fragment
 public class CategoryListFragment extends Fragment {
     private FragmentListBinding mBinding;
     private categoryAdapter mCategoryAdapter;
@@ -49,21 +49,17 @@ public class CategoryListFragment extends Fragment {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.
                 inflate(inflater, R.layout.fragment_list, container, false);
-        //  findViews(view);
-        mBinding.list.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mBinding.AscDscSpinner.setVisibility(View.GONE);
-        mBinding.SortSpinner.setVisibility(View.GONE);
+        initializeView();
         return mBinding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void initializeView() {
+        mBinding.list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.AscDscSpinner.setVisibility(View.GONE);
+        mBinding.SortSpinner.setVisibility(View.GONE);
+        mBinding.buttonSearchProductList.setVisibility(View.GONE);
+        mBinding.editTextProductList.setVisibility(View.GONE);
     }
-
-  /*  private void findViews(View view) {
-        mRecyclerView = view.findViewById(R.id.list);
-    }*/
 
     private void registerObservers() {
         mCategoryListLive.observe(this, new Observer<List<Category>>() {

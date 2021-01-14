@@ -15,29 +15,60 @@
         android:background="#EBEFF5"
         tools:context=".View.Fragment.ProductListFragment">
 
+        <EditText
+            android:id="@+id/editTextProductList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/search_hint"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/AscDscSpinner"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSearchProductList"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/search_hint" />
+
+        <Button
+            android:id="@+id/buttonSearchProductList"
+            android:layout_width="64dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            app:icon="@android:drawable/ic_menu_search"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextProductList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editTextProductList"
+            app:layout_constraintTop_toTopOf="@+id/editTextProductList" />
+
         <Spinner
             android:id="@+id/AscDscSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toTopOf="@+id/list"
             app:layout_constraintEnd_toStartOf="@+id/SortSpinner"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextProductList" />
 
         <Spinner
             android:id="@+id/SortSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/list"
+            app:layout_constraintBottom_toBottomOf="@+id/AscDscSpinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/AscDscSpinner"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/AscDscSpinner" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

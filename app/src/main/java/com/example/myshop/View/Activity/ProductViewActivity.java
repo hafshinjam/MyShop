@@ -7,8 +7,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import com.example.myshop.View.Fragment.ProductViewFragment;
 import com.example.myshop.R;
+import com.example.myshop.View.Fragment.ProductViewFragment;
 import com.example.myshop.databinding.ActivityProductViewBinding;
 
 public class ProductViewActivity extends AppCompatActivity {

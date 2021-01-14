@@ -27,7 +27,7 @@ public class GetProductsDeserializer implements JsonDeserializer<List<Product>> 
             String description = productObject.get("description").getAsString();
             long price;
             if (!productObject.get("price").getAsString().equals(""))
-              price = productObject.get("price").getAsLong();
+                price = productObject.get("price").getAsLong();
             else
                 continue;
             List<String> imageUris = deserializeImages(productObject.get("images").getAsJsonArray());

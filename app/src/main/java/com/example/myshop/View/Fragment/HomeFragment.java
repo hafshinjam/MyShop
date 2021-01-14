@@ -9,16 +9,17 @@ import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myshop.R;
 import com.example.myshop.View.Activity.ListActivity;
 import com.example.myshop.databinding.FragmentHomeBinding;
-import com.example.myshop.repository.ProductRepository;
+import com.example.myshop.viewModel.HomeFragmentViewModel;
 
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding mBinding;
-    private ProductRepository mProductRepository;
+    private HomeFragmentViewModel mHomeFragmentViewModel;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -32,9 +33,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-        mProductRepository = ProductRepository.getInstance(getContext());
+        mHomeFragmentViewModel = new ViewModelProvider(this)
+                .get(HomeFragmentViewModel.class);
     }
 
     @Override
@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.
                 inflate(inflater, R.layout.fragment_home, container, false);
+        mBinding.setViewModel(mHomeFragmentViewModel);
         setOnclickListener();
         return mBinding.getRoot();
     }
@@ -51,26 +52,35 @@ public class HomeFragment extends Fragment {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mProductRepository.fetchProductListTopRated(1);
+                        mHomeFragmentViewModel.fetchProductListTopRated();
                         showProductList();
-                        Log.d("click","top");
+                        Log.d("click", "top");
                     }
                 });
         mBinding.newArrivals
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mProductRepository.fetchProductListRecent(1);
+                        mHomeFragmentViewModel.fetchProductListRecent();
                         showProductList();
-                        Log.d("click","recent");
+                        Log.d("click", "recent");
                     }
                 });
         mBinding.mostViewed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProductRepository.fetchProductListPopularity(1);
+                mHomeFragmentViewModel.fetchProductListPopularity();
                 showProductList();
-                Log.d("click","popular");
+                Log.d("click", "popular");
+            }
+        });
+        mBinding.searchButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String search = mBinding.editTextProductHome.getText().toString();
+                mHomeFragmentViewModel.setSearchParameter(search);
+                mHomeFragmentViewModel.fetchProductListRecent();
+                showProductList();
             }
         });
     }

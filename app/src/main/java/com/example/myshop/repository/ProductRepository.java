@@ -285,7 +285,7 @@ public class ProductRepository {
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
-                Toast.makeText(mContext ,"خطا در برقراری ارتباط با سرور",Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "خطا در برقراری ارتباط با سرور", Toast.LENGTH_LONG).show();
             }
         });
     }

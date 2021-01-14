@@ -1,20 +1,14 @@
 package com.example.myshop.View.Fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.myshop.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AccountManagementFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AccountManagementFragment extends Fragment {
 
 
