@@ -28,6 +28,9 @@
     <string name="cart_item_photo">cart item photo</string>
     <string name="guarantee">گارانتی اصالت و سلامت</string>
     <string name="search_hint">جست و جوی محصول</string>
+    <string name="special_products">محصولات ویژه</string>
+    <string name="popular_products">محصولات محبوب</string>
+    <string name="most_viewed_products">محصولات پربازدید</string>
 
     <string-array name="sortMethod">
         <item>----</item>

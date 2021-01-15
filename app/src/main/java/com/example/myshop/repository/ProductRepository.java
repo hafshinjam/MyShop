@@ -33,6 +33,7 @@ import static com.example.myshop.Remote.RetrofitInstance.QUERY_OPTIONS;
 public class ProductRepository {
     private static ProductRepository sProductRepository;
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mProductListSpecial = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
     private Product mProductToShow;
     private String categoryID;
@@ -192,6 +193,25 @@ public class ProductRepository {
         });
     }
 
+    public void fetchSpecialProductsList(int pageNumber) {
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
+        OPTIONS.put("page", String.valueOf(pageNumber));
+        OPTIONS.putAll(SortOrder);
+        OPTIONS.put("tag", "48");
+        Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
+
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                mProductListSpecial.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("product_topRated_fetched", t.toString(), t);
+            }
+        });
+    }
 //    public void fetchProductWithSearch(int pageNumber, String searchText) {
 //        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
 //        OPTIONS.put("search", searchText);
@@ -252,6 +272,10 @@ public class ProductRepository {
 
     public MutableLiveData<List<Product>> getProductList() {
         return mProductList;
+    }
+
+    public MutableLiveData<List<Product>> getProductListSpecial() {
+        return mProductListSpecial;
     }
 
     public MutableLiveData<List<Category>> getCategoriesList() {
