@@ -8,9 +8,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.myshop.Model.Product;
+import com.example.myshop.Data.Model.Product;
 import com.example.myshop.R;
-import com.example.myshop.repository.ProductRepository;
+import com.example.myshop.Data.repository.ProductRepository;
 import com.squareup.picasso.Picasso;
 
 public class ProductViewModel extends AndroidViewModel {

@@ -12,14 +12,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyShop">
-        <activity android:name=".View.Activity.ProductViewActivity"></activity>
-        <activity android:name=".View.Activity.ListActivity" />
-        <activity android:name=".View.Activity.MainActivity">
+        <activity android:name=".View.Activity.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".View.Activity.ProductViewActivity" />
+        <activity android:name=".View.Activity.ListActivity" />
+        <activity android:name=".View.Activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SEARCH" />
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
     </application>
 

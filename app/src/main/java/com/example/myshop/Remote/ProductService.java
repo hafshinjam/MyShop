@@ -1,7 +1,7 @@
 package com.example.myshop.Remote;
 
-import com.example.myshop.Model.Category;
-import com.example.myshop.Model.Product;
+import com.example.myshop.Data.Model.Category;
+import com.example.myshop.Data.Model.Product;
 
 import java.util.List;
 import java.util.Map;

@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.myshop.Model.Product;
-import com.example.myshop.repository.ProductRepository;
+import com.example.myshop.Data.Model.Product;
+import com.example.myshop.Data.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,12 +34,22 @@ public class ProductListViewModel extends AndroidViewModel {
         return mProductListLiveData.getValue();
     }
 
-    public void setSortOrder(Boolean sortOrder) {
+    public void setSortOrderAndSearch(Boolean sortOrder, int method) {
         if (sortOrder)
             SortOrder.put("order", "desc");
         else
             SortOrder.put("order", "asc");
         mRepository.setSortOrder(SortOrder);
+        switch (method) {
+            case 1:
+                fetchProductsSortPopularity();
+                break;
+            case 2:
+                fetchProductsSortPrice();
+                break;
+            case 3:
+                fetchProductsSortDate();
+        }
     }
 
     public void search(String searchParameter) {

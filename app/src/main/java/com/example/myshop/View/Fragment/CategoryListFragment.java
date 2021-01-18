@@ -12,15 +12,19 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.myshop.Adapters.categoryAdapter;
-import com.example.myshop.Model.Category;
+import com.example.myshop.Data.Model.Category;
 import com.example.myshop.R;
+import com.example.myshop.databinding.FragmentCategoryListBinding;
 import com.example.myshop.databinding.FragmentListBinding;
-import com.example.myshop.repository.ProductRepository;
+import com.example.myshop.Data.repository.ProductRepository;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
+
 //todo implement ViewModel for this fragment
 public class CategoryListFragment extends Fragment {
-    private FragmentListBinding mBinding;
+    private FragmentCategoryListBinding mCategoryListBinding;
+
     private categoryAdapter mCategoryAdapter;
     private ProductRepository mRepository;
     private LiveData<List<Category>> mCategoryListLive;
@@ -39,26 +43,48 @@ public class CategoryListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mRepository = ProductRepository.getInstance(getContext());
         mCategoryListLive = mRepository.getCategoriesList();
-        registerObservers();
-        mRepository.fetchCategoriesList();
+  /*      registerObservers();
+        mRepository.fetchCategoriesList();*/
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.
-                inflate(inflater, R.layout.fragment_list, container, false);
+        mCategoryListBinding = DataBindingUtil.
+                inflate(inflater, R.layout.fragment_category_list, container, false);
         initializeView();
-        return mBinding.getRoot();
+        Category category = mRepository.getCategoryListMap().entrySet().iterator().next().getKey();
+        initAdapters(mRepository.getCategoryListMap().get(category));
+        return mCategoryListBinding.getRoot();
     }
 
     private void initializeView() {
-        mBinding.list.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mBinding.AscDscSpinner.setVisibility(View.GONE);
-        mBinding.SortSpinner.setVisibility(View.GONE);
-        mBinding.buttonSearchProductList.setVisibility(View.GONE);
-        mBinding.editTextProductList.setVisibility(View.GONE);
+        mCategoryListBinding.categoryList
+                .setLayoutManager(new LinearLayoutManager(getActivity()));
+        for (Category category : mRepository.getCategoryListMap().keySet()) {
+            mCategoryListBinding.categoryTabLayout
+                    .addTab(mCategoryListBinding.categoryTabLayout.newTab()
+                            .setText(category.getCategoryName()));
+        }
+        mCategoryListBinding.categoryTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Category category = mRepository.getCategory(tab.getText().toString());
+                List<Category> categories = mRepository.getCategoryListMap().get(category);
+                initAdapters(categories);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     private void registerObservers() {
@@ -66,16 +92,14 @@ public class CategoryListFragment extends Fragment {
             @Override
             public void onChanged(List<Category> categories) {
                 initAdapters(categories);
-                mBinding.list.setVisibility(View.VISIBLE);
             }
         });
     }
 
     private void initAdapters(List<Category> list) {
-        if (mCategoryAdapter == null) {
             mCategoryAdapter = new categoryAdapter(list, getActivity());
-            mBinding.list.setAdapter(mCategoryAdapter);
-        }
+            mCategoryListBinding.categoryList.setAdapter(mCategoryAdapter);
+
         mCategoryAdapter.notifyDataSetChanged();
     }
 }

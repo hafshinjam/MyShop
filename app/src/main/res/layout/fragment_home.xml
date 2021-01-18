@@ -16,45 +16,15 @@
         android:layout_height="match_parent"
         tools:context=".View.Fragment.HomeFragment">
 
-        <EditText
-            android:id="@+id/editTextProductHome"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/search_hint"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toTopOf="@id/listScrollHome"
-            app:layout_constraintEnd_toStartOf="@+id/searchButtonHome"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/searchButtonHome"
-            android:layout_width="64dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:icon="@android:drawable/ic_menu_search"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextProductHome"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editTextProductHome"
-            app:layout_constraintTop_toTopOf="@+id/editTextProductHome" />
-
         <ScrollView
             android:id="@+id/listScrollHome"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextProductHome">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"

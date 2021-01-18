@@ -1,6 +1,7 @@
 package com.example.myshop.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myshop.Model.Product;
+import com.example.myshop.Data.Model.Product;
 import com.example.myshop.R;
-import com.example.myshop.repository.ProductRepository;
+import com.example.myshop.View.Activity.ProductViewActivity;
+import com.example.myshop.Data.repository.ProductRepository;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -65,11 +67,22 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.CartItemViewHo
             PlusButton = itemView.findViewById(R.id.cartItemPlus);
             ItemCount = itemView.findViewById(R.id.cartItemCount);
             //todo set using the function in repository
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mRepository.setProductToShow(mProduct);
+                    Intent intent = ProductViewActivity.newIntent(mContext);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intent);
+                }
+            });
             PlusButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int count = mRepository.getProductCartCount(mProduct) + 1;
                     mRepository.
-                            updateProductCart(mProduct, (mRepository.getProductCartCount(mProduct) + 1));
+                            updateProductCart(mProduct, count);
+                    ItemCount.setText(String.valueOf(count));
                 }
             });
             MinusButton.setOnClickListener(new View.OnClickListener() {

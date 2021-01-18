@@ -12,10 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myshop.Model.Category;
+import com.example.myshop.Data.Model.Category;
 import com.example.myshop.R;
 import com.example.myshop.View.Activity.ListActivity;
-import com.example.myshop.repository.ProductRepository;
+import com.example.myshop.Data.repository.ProductRepository;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

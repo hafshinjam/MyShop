@@ -1,4 +1,4 @@
-package com.example.myshop.repository;
+package com.example.myshop.Data.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,8 +7,8 @@ import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.myshop.Model.Category;
-import com.example.myshop.Model.Product;
+import com.example.myshop.Data.Model.Category;
+import com.example.myshop.Data.Model.Product;
 import com.example.myshop.Remote.GetCategoryDeserializer;
 import com.example.myshop.Remote.GetProductDeserializer;
 import com.example.myshop.Remote.GetProductsDeserializer;
@@ -31,22 +31,28 @@ import static com.example.myshop.Remote.NetworkParameters.BASE_PATH;
 import static com.example.myshop.Remote.RetrofitInstance.QUERY_OPTIONS;
 
 public class ProductRepository {
-    private static ProductRepository sProductRepository;
+    //liveData
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mProductListSpecial = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
+    public MutableLiveData<List<Product>> mProductsCart = new MutableLiveData<>();
+    //services
+    private ProductService mProductsService;
+    private ProductService mSingleProductService;
+    private ProductService mCategoryService;
+    //repositories
+    private static ProductRepository sProductRepository;
+    private CategoryDBRepository mCategoryDBRepository;
+
     private Product mProductToShow;
     private String categoryID;
     private String searchText;
     private Map<String, String> SortOrder;
+    private Map<Category, List<Category>> mCategoryListMap;
 
-    private ProductService mProductsService;
-    private ProductService mSingleProductService;
     private SharedPreferences mPreferences;
     private Context mContext;
 
-    public MutableLiveData<List<Product>> mProductsCart = new MutableLiveData<>();
-    private ProductService mCategoryService;
 
     Type typeCategory = new TypeToken<List<Category>>() {
     }.getType();
@@ -62,6 +68,7 @@ public class ProductRepository {
 
     public ProductRepository(Context context) {
         mContext = context.getApplicationContext();
+        mCategoryDBRepository = CategoryDBRepository.getInstance(mContext);
         mPreferences = mContext.
                 getSharedPreferences("com.example.myshop.Cart", Context.MODE_PRIVATE);
         Type type = new TypeToken<List<Product>>() {
@@ -212,24 +219,6 @@ public class ProductRepository {
             }
         });
     }
-//    public void fetchProductWithSearch(int pageNumber, String searchText) {
-//        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
-//        OPTIONS.put("search", searchText);
-//        OPTIONS.put("page", String.valueOf(pageNumber));
-//        Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
-//        call.enqueue(new Callback<List<Product>>() {
-//            @Override
-//            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-//                mProductList.setValue(response.body());
-//                Log.d("product_recent_fetched", "recent");
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Product>> call, Throwable t) {
-//                Log.d("product_recent_fetched", t.toString(), t);
-//            }
-//        });
-//    }
 
     public void fetchCategoryProductList(String categoryID, int page) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
@@ -260,6 +249,9 @@ public class ProductRepository {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 mCategoriesList.setValue(response.body());
+                mCategoryDBRepository.clear();
+                mCategoryDBRepository.insertList(response.body());
+                ClusterCategoryList();
                 Log.d("category_fetched", response.toString());
             }
 
@@ -337,6 +329,16 @@ public class ProductRepository {
         return mProductsCart;
     }
 
+    public void setProductsCartValues(List<Product> productsCart) {
+        mProductsCart.setValue(productsCart);
+    }
+
+    public int getProductCartSize() {
+        if (mProductsCart.getValue() != null)
+            return mProductsCart.getValue().size();
+        else return 0;
+    }
+
     public SharedPreferences getPreferences() {
         return mPreferences;
     }
@@ -347,5 +349,22 @@ public class ProductRepository {
 
     public void setSearchText(String searchText) {
         this.searchText = searchText;
+    }
+
+    public void ClusterCategoryList() {
+        mCategoryListMap = new HashMap<>();
+        for (Category cat : mCategoryDBRepository.getParentCategories()) {
+            List<Category> categories = new ArrayList<>();
+            categories.add(cat);
+            categories.addAll(mCategoryDBRepository.getCategoryByParentCategory(cat.getCategoryID()));
+            mCategoryListMap.put(cat, categories);
+        }
+    }
+
+    public Map<Category, List<Category>> getCategoryListMap() {
+        return mCategoryListMap;
+    }
+    public Category getCategory(String name){
+        return mCategoryDBRepository.getCategoryByName(name);
     }
 }

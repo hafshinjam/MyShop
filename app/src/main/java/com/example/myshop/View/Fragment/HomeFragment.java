@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myshop.Adapters.productAdapter;
-import com.example.myshop.Model.Product;
+import com.example.myshop.Data.Model.Product;
 import com.example.myshop.R;
 import com.example.myshop.View.Activity.ListActivity;
 import com.example.myshop.databinding.FragmentHomeBinding;
@@ -44,6 +44,7 @@ public class HomeFragment extends Fragment {
         mHomeFragmentViewModel = new ViewModelProvider(this)
                 .get(HomeFragmentViewModel.class);
         mHomeFragmentViewModel.fetchSpecialProductList();
+
     }
 
     @Override
@@ -87,7 +88,8 @@ public class HomeFragment extends Fragment {
                 Log.d("click", "popular");
             }
         });
-        mBinding.searchButtonHome.setOnClickListener(new View.OnClickListener() {
+
+     /*   mBinding.searchButtonHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String search = mBinding.editTextProductHome.getText().toString();
@@ -95,12 +97,12 @@ public class HomeFragment extends Fragment {
                 mHomeFragmentViewModel.fetchProductListRecent();
                 showProductList();
             }
-        });
+        });*/
     }
 
     public void setObservers() {
         mHomeFragmentViewModel.getSpecialProductLive()
-                .observe(this, new Observer<List<Product>>() {
+                .observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
                     @Override
                     public void onChanged(List<Product> products) {
                         initSpecialList(products);

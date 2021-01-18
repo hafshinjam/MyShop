@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.myshop.Adapters.cartAdapter;
-import com.example.myshop.Model.Product;
+import com.example.myshop.Data.Model.Product;
 import com.example.myshop.R;
 import com.example.myshop.databinding.FragmentCartBinding;
 import com.example.myshop.viewModel.CartViewModel;
@@ -40,7 +40,6 @@ public class CartFragment extends Fragment {
         mCartViewModel = new ViewModelProvider(this)
                 .get(CartViewModel.class);
         registerListener();
-        mCartViewModel.fetchCartList();
     }
 
     @Override
@@ -50,6 +49,10 @@ public class CartFragment extends Fragment {
         mCartBinding = DataBindingUtil
                 .inflate(inflater, R.layout.fragment_cart, container, false);
         mCartBinding.setViewModel(mCartViewModel);
+        if (mCartViewModel.isListEmpty()) {
+            mCartBinding.emptyCartPic.setVisibility(View.VISIBLE);
+            mCartBinding.cartList.setVisibility(View.INVISIBLE);
+        }
         mCartBinding.cartList.setLayoutManager(new LinearLayoutManager(getActivity()));
         return mCartBinding.getRoot();
     }
@@ -65,9 +68,33 @@ public class CartFragment extends Fragment {
     }
 
     private void initAdapter() {
+        mCartBinding.emptyCartPic.setVisibility(View.INVISIBLE);
+        mCartBinding.cartList.setVisibility(View.VISIBLE);
         mAdapter = new cartAdapter(mCartViewModel.getCartListLiveData().getValue(), getContext());
         mCartBinding.cartList
                 .setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mCartViewModel.isListEmpty()) {
+            mCartBinding.emptyCartPic.setVisibility(View.VISIBLE);
+            mCartBinding.cartList.setVisibility(View.INVISIBLE);
+        }
+        mCartViewModel.fetchCartList();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCartViewModel.EmptyList();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mCartViewModel.EmptyList();
     }
 }

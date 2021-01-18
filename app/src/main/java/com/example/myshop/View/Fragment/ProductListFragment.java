@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.myshop.Adapters.productAdapter;
-import com.example.myshop.Model.Product;
+import com.example.myshop.Data.Model.Product;
 import com.example.myshop.R;
 import com.example.myshop.databinding.FragmentListBinding;
 import com.example.myshop.viewModel.ProductListViewModel;
@@ -110,7 +110,8 @@ public class ProductListFragment extends Fragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         boolean order;
                         order = position == 0;
-                        mProductListViewModel.setSortOrder(order);
+                        int method = (int) mBinding.SortSpinner.getSelectedItemId();
+                        mProductListViewModel.setSortOrderAndSearch(order,method);
                     }
 
                     @Override

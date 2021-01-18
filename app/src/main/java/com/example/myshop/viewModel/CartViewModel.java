@@ -7,9 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.myshop.Model.Product;
-import com.example.myshop.repository.ProductRepository;
+import com.example.myshop.Data.Model.Product;
+import com.example.myshop.Data.repository.ProductRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,5 +34,13 @@ public class CartViewModel extends AndroidViewModel {
         for (String id : listSharedPreferences.keySet()) {
             mRepository.fetchCartItem(id);
         }
+    }
+
+    public void EmptyList() {
+        mRepository.setProductsCartValues(new ArrayList<>());
+    }
+
+    public boolean isListEmpty() {
+        return mRepository.getProductCartSize() == 0;
     }
 }

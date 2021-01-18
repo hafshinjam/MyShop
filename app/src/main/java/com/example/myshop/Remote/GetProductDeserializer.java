@@ -1,6 +1,6 @@
 package com.example.myshop.Remote;
 
-import com.example.myshop.Model.Product;
+import com.example.myshop.Data.Model.Product;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
