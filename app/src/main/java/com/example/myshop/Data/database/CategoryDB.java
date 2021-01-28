@@ -7,5 +7,5 @@ import com.example.myshop.Data.Model.Category;
 
 @Database(entities = {Category.class}, version = 1, exportSchema = false)
 public abstract class CategoryDB extends RoomDatabase {
-public abstract CategoryDatabaseDAO CategoryDAO();
+    public abstract CategoryDatabaseDAO CategoryDAO();
 }

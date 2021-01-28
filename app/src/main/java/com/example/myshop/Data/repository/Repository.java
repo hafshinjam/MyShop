@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.myshop.Data.Model.Category;
@@ -27,21 +29,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static com.example.myshop.Remote.NetworkParameters.BASE_PATH;
 import static com.example.myshop.Remote.RetrofitInstance.QUERY_OPTIONS;
 
-public class ProductRepository {
+public class Repository {
     //liveData
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mProductListSpecial = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mCategoriesList = new MutableLiveData<>();
-    public MutableLiveData<List<Product>> mProductsCart = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mProductsCart = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mProductsByRate = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mProductsByPopularity = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mProductsRecent = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mCartChange = new MutableLiveData<>(false);
     //services
     private ProductService mProductsService;
     private ProductService mSingleProductService;
     private ProductService mCategoryService;
     //repositories
-    private static ProductRepository sProductRepository;
+    private static Repository sRepository;
     private CategoryDBRepository mCategoryDBRepository;
 
     private Product mProductToShow;
@@ -49,6 +54,7 @@ public class ProductRepository {
     private String searchText;
     private Map<String, String> SortOrder;
     private Map<Category, List<Category>> mCategoryListMap;
+    private String searchMethod = "";
 
     private SharedPreferences mPreferences;
     private Context mContext;
@@ -57,29 +63,31 @@ public class ProductRepository {
     Type typeCategory = new TypeToken<List<Category>>() {
     }.getType();
     Object categoryTypeAdapter = new GetCategoryDeserializer();
-    private Retrofit mRetrofitCategory = RetrofitInstance.getInstance(typeCategory, categoryTypeAdapter, BASE_PATH);
+    private Retrofit mRetrofitCategory = RetrofitInstance.getProductRetrofitInstance(typeCategory, categoryTypeAdapter);
 
-    public static ProductRepository getInstance(Context context) {
-        if (sProductRepository == null) {
-            sProductRepository = new ProductRepository(context);
+    public static Repository getInstance(Context context) {
+        if (sRepository == null) {
+            sRepository = new Repository(context);
         }
-        return sProductRepository;
+        return sRepository;
     }
 
-    public ProductRepository(Context context) {
+    public Repository(Context context) {
         mContext = context.getApplicationContext();
+
         mCategoryDBRepository = CategoryDBRepository.getInstance(mContext);
+
         mPreferences = mContext.
                 getSharedPreferences("com.example.myshop.Cart", Context.MODE_PRIVATE);
         Type type = new TypeToken<List<Product>>() {
         }.getType();
         Object typeAdapter = new GetProductsDeserializer();
-        Retrofit retrofit = RetrofitInstance.getInstance(type, typeAdapter, BASE_PATH);
+        Retrofit retrofit = RetrofitInstance.getProductRetrofitInstance(type, typeAdapter);
         mProductsService = retrofit.create(ProductService.class);
 
         Type productType = Product.class;
         Object typeAdapterProduct = new GetProductDeserializer();
-        Retrofit retrofitProduct = RetrofitInstance.getInstance(productType, typeAdapterProduct, BASE_PATH);
+        Retrofit retrofitProduct = RetrofitInstance.getProductRetrofitInstance(productType, typeAdapterProduct);
         mSingleProductService = retrofitProduct.create(ProductService.class);
 
         SortOrder = new HashMap<>();
@@ -93,92 +101,31 @@ public class ProductRepository {
 
     public void fetchProductListRecent(int pageNumber) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
-        OPTIONS.put("orderby", "date");
-        OPTIONS.putAll(SortOrder);
-        OPTIONS.put("page", String.valueOf(pageNumber));
-        if (categoryID != null) {
-            OPTIONS.put("category", categoryID);
-        }
-        if (searchText != null) {
-            OPTIONS.put("search", searchText);
-        }
-        Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
-        call.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                mProductList.setValue(response.body());
-                Log.d("product_recent_fetched", "recent");
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("product_recent_fetched", t.toString(), t);
-            }
-        });
+        fetchProductsList(pageNumber, OPTIONS, "date", "recent");
     }
 
     public void fetchProductListPopularity(int pageNumber) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
-        OPTIONS.put("orderby", "popularity");
-        OPTIONS.putAll(SortOrder);
-        OPTIONS.put("page", String.valueOf(pageNumber));
-        if (categoryID != null) {
-            OPTIONS.put("category", categoryID);
-        }
-        if (searchText != null) {
-            OPTIONS.put("search", searchText);
-        }
-        Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
-
-        call.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                mProductList.setValue(response.body());
-                Log.d("product_recent_fetched", "popular");
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("product_popular_fetched", t.toString(), t);
-            }
-        });
-
-
+        fetchProductsList(pageNumber, OPTIONS, "popularity", "popular");
     }
 
     public void fetchProductListTopRated(int pageNumber) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
-        OPTIONS.put("orderby", "rating");
-        OPTIONS.put("page", String.valueOf(pageNumber));
-        OPTIONS.putAll(SortOrder);
-        if (categoryID != null) {
-            OPTIONS.put("category", categoryID);
-        }
-        if (searchText != null) {
-            OPTIONS.put("search", searchText);
-        }
-        Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
-
-        call.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                mProductList.setValue(response.body());
-                Log.d("product_recent_fetched", "top");
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("product_topRated_fetched", t.toString(), t);
-            }
-        });
+        fetchProductsList(pageNumber, OPTIONS, "rating", "top");
     }
 
     public void fetchProductsListByPrice(int pageNumber) {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
-        OPTIONS.put("orderby", "price");
-        OPTIONS.put("page", String.valueOf(pageNumber));
+        fetchProductsList(pageNumber, OPTIONS, "price", "price");
+    }
+
+    private void fetchProductsList(int pageNumber,
+                                   Map<String, String> OPTIONS,
+                                   String method,
+                                   String fetchLogTag) {
+        OPTIONS.put("orderby", method);
         OPTIONS.putAll(SortOrder);
+        OPTIONS.put("page", String.valueOf(pageNumber));
         if (categoryID != null) {
             OPTIONS.put("category", categoryID);
         }
@@ -186,16 +133,16 @@ public class ProductRepository {
             OPTIONS.put("search", searchText);
         }
         Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
-
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 mProductList.setValue(response.body());
+                Log.d("product_fetched", fetchLogTag);
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("product_topRated_fetched", t.toString(), t);
+                Log.d("product_fetched", t.toString(), t);
             }
         });
     }
@@ -211,11 +158,51 @@ public class ProductRepository {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 mProductListSpecial.setValue(response.body());
+                Log.d("product_fetched", "special");
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("product_topRated_fetched", t.toString(), t);
+                Log.d("product_fetched", t.toString(), t);
+            }
+        });
+    }
+
+    public void fetchRecentHome() {
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
+        fetchHomeList(OPTIONS, mProductsRecent);
+    }
+
+    public void fetchByRatingHome() {
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
+        fetchHomeList(OPTIONS, mProductsByRate);
+    }
+
+    public void fetchByPopularityHome() {
+        Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
+        fetchHomeList(OPTIONS, mProductsByPopularity);
+    }
+
+    private void fetchHomeList(Map<String, String> OPTIONS,
+                               MutableLiveData<List<Product>> products) {
+        OPTIONS.put("orderby", "date");
+        OPTIONS.putAll(SortOrder);
+        if (categoryID != null) {
+            OPTIONS.put("category", categoryID);
+        }
+        if (searchText != null) {
+            OPTIONS.put("search", searchText);
+        }
+        Call<List<Product>> call = mProductsService.listProducts(OPTIONS);
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                products.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("product_fetched", t.toString(), t);
             }
         });
     }
@@ -262,6 +249,18 @@ public class ProductRepository {
         });
     }
 
+    public MutableLiveData<List<Product>> getProductsByRate() {
+        return mProductsByRate;
+    }
+
+    public MutableLiveData<List<Product>> getProductsByPopularity() {
+        return mProductsByPopularity;
+    }
+
+    public MutableLiveData<List<Product>> getProductsRecent() {
+        return mProductsRecent;
+    }
+
     public MutableLiveData<List<Product>> getProductList() {
         return mProductList;
     }
@@ -283,14 +282,22 @@ public class ProductRepository {
         Log.d("repository", productToShow.getName());
     }
 
+    public void fetchCartList() {
+        SharedPreferences sharedPreferences = getPreferences();
+        Map<String, ?> listSharedPreferences = sharedPreferences.getAll();
+        for (String id : listSharedPreferences.keySet()) {
+            fetchCartItem(id);
+        }
+    }
+
     public void fetchCartItem(String id) {
         Map<String, String> options = new HashMap<>(QUERY_OPTIONS);
         Call<Product> productCall = mSingleProductService.getProduct(id, options);
         productCall.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                Log.d("Fetch_product", String.valueOf(response.body().getName()));
-                if (response.body().getDescription() != null) {
+                if (response.body() != null && response.body().getDescription() != null) {
+                    Log.d("Fetch_product", String.valueOf(response.body().getName()));
                     List<Product> products = new ArrayList<>();
                     if (mProductsCart.getValue() != null)
                         products = mProductsCart.getValue();
@@ -300,7 +307,7 @@ public class ProductRepository {
             }
 
             @Override
-            public void onFailure(Call<Product> call, Throwable t) {
+            public void onFailure(@NonNull Call<Product> call, Throwable t) {
                 Toast.makeText(mContext, "خطا در برقراری ارتباط با سرور", Toast.LENGTH_LONG).show();
             }
         });
@@ -339,6 +346,19 @@ public class ProductRepository {
         else return 0;
     }
 
+    public LiveData<Boolean> getCartChange() {
+        return mCartChange;
+    }
+
+    public void setCartChange(MutableLiveData<Boolean> cartChange) {
+        mCartChange = cartChange;
+    }
+
+    public void toggleCartChangeLive() {
+        if (mCartChange.getValue() != null)
+            mCartChange.setValue(!mCartChange.getValue());
+    }
+
     public SharedPreferences getPreferences() {
         return mPreferences;
     }
@@ -364,7 +384,16 @@ public class ProductRepository {
     public Map<Category, List<Category>> getCategoryListMap() {
         return mCategoryListMap;
     }
-    public Category getCategory(String name){
+
+    public Category getCategory(String name) {
         return mCategoryDBRepository.getCategoryByName(name);
+    }
+
+    public String getSearchMethod() {
+        return searchMethod;
+    }
+
+    public void setSearchMethod(String searchMethod) {
+        this.searchMethod = searchMethod;
     }
 }

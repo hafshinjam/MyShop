@@ -38,112 +38,205 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
             android:text="@{viewModel.productTitle}"
-            app:layout_constraintBottom_toTopOf="@+id/productDescriptionTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/productImageView" />
 
-        <TextView
-            android:id="@+id/productDescriptionTitle"
+        <View
+            android:id="@+id/separator1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/Description"
-            app:layout_constraintBottom_toTopOf="@+id/priceTagTextView"
-            app:layout_constraintEnd_toStartOf="@+id/productDescriptionTextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/productNameTextView" />
-
-        <TextView
-            android:id="@+id/productDescriptionTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:text="@{viewModel.productDescription}"
-            app:layout_constraintBottom_toTopOf="@+id/productPriceTextView"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/grey"
+            app:layout_constraintBottom_toTopOf="@+id/detailButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/productDescriptionTitle"
-            app:layout_constraintTop_toBottomOf="@+id/productNameTextView" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/productNameTextView" />
 
-        <TextView
-            android:id="@+id/priceTagTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/detailButton"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/price"
-            app:layout_constraintBottom_toTopOf="@+id/addToCartButton"
-            app:layout_constraintEnd_toStartOf="@+id/productPriceTextView"
-            app:layout_constraintStart_toStartOf="@+id/productDescriptionTitle"
-            app:layout_constraintTop_toBottomOf="@+id/productDescriptionTextView" />
+            android:text="ویژگی های محصول"
+            app:cornerRadius="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/separator2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/divider1"
+            app:layout_constraintTop_toBottomOf="@id/separator1" />
 
-        <TextView
-            android:id="@+id/productPriceTextView"
-            android:layout_width="wrap_content"
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toTopOf="@+id/separator2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/separator1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/commentsButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:text="@{viewModel.productPrice}"
-            app:layout_constraintBottom_toTopOf="@+id/addToCartButton"
-            app:layout_constraintEnd_toEndOf="@+id/productDescriptionTextView"
-            app:layout_constraintStart_toEndOf="@+id/priceTagTextView"
-            app:layout_constraintTop_toBottomOf="@+id/productDescriptionTextView" />
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="16dp"
+            android:text="نظرات کاربران"
+            app:cornerRadius="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/detailButton"
+            app:layout_constraintEnd_toStartOf="@+id/divider1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/detailButton" />
 
-        <TextView
-            android:id="@+id/productCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="264dp"
-            android:inputType="number"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/plusButton"
-            app:layout_constraintStart_toEndOf="@+id/minusButton"
-            tools:text="1" />
+        <View
+            android:id="@+id/separator2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailButton" />
 
-        <Button
-            android:id="@+id/plusButton"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="256dp"
-            android:text="@string/plus"
-            android:textAlignment="viewStart"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/addToCartButton"
-            app:layout_constraintStart_toEndOf="@+id/productCount" />
-
-        <Button
-            android:id="@+id/minusButton"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="256dp"
-            android:text="@string/minus"
-            android:textAlignment="viewStart"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/productCount"
-            app:layout_constraintStart_toStartOf="@id/priceTagTextView" />
-
-        <Button
-            android:id="@+id/addToCartButton"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/commentsLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="256dp"
-            android:text="@string/update_cart"
-            app:icon="@drawable/ic_cart"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/plusButton" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/separator2"
+            android:visibility="invisible">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detailLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailButton">
+
+            <TextView
+                android:id="@+id/productDescriptionTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/Description"
+                app:layout_constraintEnd_toStartOf="@+id/productDescriptionTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/productDescriptionTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{viewModel.productDescription}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/productDescriptionTitle"
+                app:layout_constraintTop_toTopOf="@+id/productDescriptionTitle" />
+
+            <TextView
+                android:id="@+id/priceTagTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price"
+                app:layout_constraintEnd_toStartOf="@id/productPriceTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/productPriceTextView" />
+
+            <TextView
+                android:id="@+id/productPriceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{viewModel.productPrice}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/priceTagTextView"
+                app:layout_constraintTop_toBottomOf="@id/productDescriptionTextView" />
+
+            <View
+                android:id="@+id/separator3"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/grey"
+                app:layout_constraintBottom_toTopOf="@+id/deleteFromCartButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/priceTagTextView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteFromCartButton"
+                android:layout_width="35dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:paddingHorizontal="2dp"
+                app:icon="@android:drawable/ic_menu_delete"
+                app:iconGravity="start"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/plusButton"
+                app:layout_constraintTop_toBottomOf="@+id/productPriceTextView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/plusButton"
+                android:layout_width="40dp"
+                android:layout_height="0dp"
+                android:text="@string/plus"
+                android:textAlignment="viewStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/deleteFromCartButton"
+                app:layout_constraintStart_toEndOf="@+id/productCount"
+                app:layout_constraintTop_toTopOf="@+id/deleteFromCartButton" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/productCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:inputType="number"
+                app:layout_constraintEnd_toStartOf="@+id/plusButton"
+                app:layout_constraintStart_toEndOf="@+id/minusButton"
+                app:layout_constraintTop_toTopOf="@+id/plusButton"
+                tools:text="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/minusButton"
+                android:layout_width="40dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/minus"
+                android:textAlignment="viewStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/productCount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/deleteFromCartButton" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

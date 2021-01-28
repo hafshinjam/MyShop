@@ -70,5 +70,14 @@ public class ProductViewFragment extends Fragment {
                                 .setText(String.valueOf(mViewModel.getProductCount()));
                     }
                 });
+        mProductViewBinding.deleteFromCartButton
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mViewModel.deleteFromCart();
+                        mProductViewBinding.productCount
+                                .setText(String.valueOf(mViewModel.getProductCount()));
+                    }
+                });
     }
 }

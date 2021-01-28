@@ -54,7 +54,12 @@ public class CartFragment extends Fragment {
             mCartBinding.cartList.setVisibility(View.INVISIBLE);
         }
         mCartBinding.cartList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        initViews();
         return mCartBinding.getRoot();
+    }
+
+    private void initViews() {
+        mCartBinding.TotalPrice.setText("0");
     }
 
     private void registerListener() {
@@ -62,7 +67,25 @@ public class CartFragment extends Fragment {
                 .observe(this, new Observer<List<Product>>() {
                     @Override
                     public void onChanged(List<Product> products) {
+                        if (products.size() == 0)
+                            mCartBinding.TotalPrice.setText(String.valueOf(0));
                         initAdapter();
+                    }
+                });
+        mCartViewModel.getCartChangeLive()
+                .observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        mCartViewModel.calculateTotalPrice();
+                        mCartBinding.TotalPrice.
+                                setText(String.valueOf(mCartViewModel.getTotalPrice()));
+                        if (mCartViewModel.isListEmpty()) {
+                            mCartBinding.cartList.setVisibility(View.INVISIBLE);
+                            mCartBinding.emptyCartPic.setVisibility(View.VISIBLE);
+                        } else {
+                            mCartBinding.cartList.setVisibility(View.VISIBLE);
+                            mCartBinding.emptyCartPic.setVisibility(View.INVISIBLE);
+                        }
                     }
                 });
     }
@@ -74,6 +97,8 @@ public class CartFragment extends Fragment {
         mCartBinding.cartList
                 .setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+        mCartViewModel.calculateTotalPrice();
+        mCartBinding.TotalPrice.setText(String.valueOf(mCartViewModel.getTotalPrice()));
     }
 
     @Override

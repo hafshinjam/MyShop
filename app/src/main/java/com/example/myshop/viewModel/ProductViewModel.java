@@ -9,29 +9,36 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.example.myshop.Data.Model.Product;
+import com.example.myshop.Data.repository.Repository;
 import com.example.myshop.R;
-import com.example.myshop.Data.repository.ProductRepository;
 import com.squareup.picasso.Picasso;
 
 public class ProductViewModel extends AndroidViewModel {
     private Product mProduct;
-    private ProductRepository mProductRepository;
+    private Repository mRepository;
     private int mProductCount = 0;
 
     public ProductViewModel(@NonNull Application application) {
         super(application);
-        mProductRepository = ProductRepository.getInstance(getApplication());
-        mProduct = mProductRepository.getProductToShow();
-        mProductCount = mProductRepository.getProductCartCount(mProduct);
+        mRepository = Repository.getInstance(getApplication());
+        mProduct = mRepository.getProductToShow();
+        mProductCount = mRepository.getProductCartCount(mProduct);
     }
 
     public void incrementCount() {
-        mProductRepository.updateProductCart(mProduct, ++mProductCount);
+        mRepository.updateProductCart(mProduct, ++mProductCount);
     }
 
     public void decrementCount() {
         if (mProductCount > 0)
-            mProductRepository.updateProductCart(mProduct, --mProductCount);
+            mRepository.updateProductCart(mProduct, --mProductCount);
+    }
+
+    public void deleteFromCart() {
+        if (mProductCount > 0) {
+            mRepository.updateProductCart(mProduct, 0);
+            mProductCount = 0;
+        }
     }
 
 

@@ -12,22 +12,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myshop.Data.Model.Product;
+import com.example.myshop.Data.repository.Repository;
 import com.example.myshop.R;
 import com.example.myshop.View.Activity.ProductViewActivity;
-import com.example.myshop.Data.repository.ProductRepository;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class productAdapter extends RecyclerView.Adapter<productAdapter.ProductHolder> {
     List<Product> mProducts;
-    private ProductRepository mProductRepository;
+    private Repository mRepository;
     Context mContext;
 
     public productAdapter(List<Product> products, Context context) {
         mContext = context.getApplicationContext();
         mProducts = products;
-        mProductRepository = ProductRepository.getInstance(context);
+        mRepository = Repository.getInstance(context);
     }
 
     @NonNull
@@ -65,7 +65,7 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.ProductH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mProductRepository.setProductToShow(mProduct);
+                    mRepository.setProductToShow(mProduct);
                     Intent intent = ProductViewActivity.newIntent(mContext);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(intent);

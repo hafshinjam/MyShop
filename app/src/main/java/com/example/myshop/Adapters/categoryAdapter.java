@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myshop.Data.Model.Category;
+import com.example.myshop.Data.repository.Repository;
 import com.example.myshop.R;
 import com.example.myshop.View.Activity.ListActivity;
-import com.example.myshop.Data.repository.ProductRepository;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.CategoryHolder> {
     List<Category> mCategories;
     Context mContext;
-    private ProductRepository mProductRepository;
+    private Repository mRepository;
 
     public List<Category> getCategories() {
         return mCategories;
@@ -38,7 +38,7 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
 
     public categoryAdapter(List<Category> categories, Context context) {
         mContext = context.getApplicationContext();
-        mProductRepository = ProductRepository.getInstance(context);
+        mRepository = Repository.getInstance(context);
         mCategories = new ArrayList<>();
         mCategories = categories;
     }
@@ -75,9 +75,9 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.Catego
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mProductRepository.setCategoryID(mCategory.getCategoryID());
+                    mRepository.setCategoryID(mCategory.getCategoryID());
                     //todo there is bug here should find another way
-                    mProductRepository.fetchCategoryProductList(mCategory.getCategoryID(), 1);
+                    mRepository.fetchCategoryProductList(mCategory.getCategoryID(), 1);
                     Log.d("cat_tag", mCategory.getCategoryID());
                     Intent intent = ListActivity.newIntent(mContext);
                     intent.setFlags(FLAG_ACTIVITY_NEW_TASK);

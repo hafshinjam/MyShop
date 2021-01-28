@@ -1,27 +1,32 @@
 package com.example.myshop.viewModel;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.myshop.Data.Model.Product;
-import com.example.myshop.Data.repository.ProductRepository;
+import com.example.myshop.Data.repository.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CartViewModel extends AndroidViewModel {
-    private ProductRepository mRepository;
+    private Repository mRepository;
     private LiveData<List<Product>> mCartListLiveData;
+    private long totalPrice;
+    private LiveData<Boolean> cartChangeLive;
 
     public CartViewModel(@NonNull Application application) {
         super(application);
-        mRepository = ProductRepository.getInstance(getApplication());
+        mRepository = Repository.getInstance(getApplication());
         mCartListLiveData = mRepository.getProductsCart();
+        cartChangeLive = mRepository.getCartChange();
+    }
+
+    public LiveData<Boolean> getCartChangeLive() {
+        return cartChangeLive;
     }
 
     public LiveData<List<Product>> getCartListLiveData() {
@@ -29,11 +34,20 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void fetchCartList() {
-        SharedPreferences sharedPreferences = mRepository.getPreferences();
-        Map<String, ?> listSharedPreferences = sharedPreferences.getAll();
-        for (String id : listSharedPreferences.keySet()) {
-            mRepository.fetchCartItem(id);
-        }
+        mRepository.fetchCartList();
+
+    }
+
+    public void calculateTotalPrice() {
+        totalPrice = 0;
+        if (mCartListLiveData.getValue() != null)
+            for (Product product : mCartListLiveData.getValue()) {
+                totalPrice += product.getPrice() * mRepository.getProductCartCount(product);
+            }
+    }
+
+    public long getTotalPrice() {
+        return totalPrice;
     }
 
     public void EmptyList() {

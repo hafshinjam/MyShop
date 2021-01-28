@@ -31,6 +31,14 @@
     <string name="special_products">محصولات ویژه</string>
     <string name="popular_products">محصولات محبوب</string>
     <string name="most_viewed_products">محصولات پربازدید</string>
+    <string name="special_product">عکس کالای ویژه</string>
+    <string name="email_for_sign_up">ایمیل جهت ثبت نام</string>
+    <string name="check_mail_button">چک کردن ایمیل</string>
+    <string name="sign_up_hint">به منظور چک کردن وجود اکانت با ایمیل وارد شده دکمه چک کردن ایمیل را پس از اطمینان از صحت ایمیلتان بزنید. در صورت داشتن اکانت دکمه ورود را در پایین فشرده تا وارد بخش ورود شوید.</string>
+    <string name="first_name">نام</string>
+    <string name="last_name">نام خانوادگی</string>
+    <string name="phone_number">شماره تماس</string>
+    <string name="show_product_list">نمایش لیست محصولات</string>
 
     <string-array name="sortMethod">
         <item>----</item>

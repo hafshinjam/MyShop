@@ -11,6 +11,7 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.myshop.Remote.NetworkParameters.BASE_PATH;
 import static com.example.myshop.Remote.NetworkParameters.CONSUMER_KEY;
 import static com.example.myshop.Remote.NetworkParameters.CONSUMER_SECRET;
 
@@ -21,11 +22,18 @@ public class RetrofitInstance {
         put("per_page", "20");
     }};
 
-    public static Retrofit getInstance(Type type, Object typeAdapter, String path) {
+    public static Retrofit getProductRetrofitInstance(Type type, Object typeAdapter) {
 
         return new Retrofit.Builder()
-                .baseUrl(path)
+                .baseUrl(BASE_PATH)
                 .addConverterFactory(createGsonFactory(type, typeAdapter))
+                .build();
+    }
+
+    public static Retrofit getCustomerRetrofitInstance() {
+        return new Retrofit.Builder()
+                .baseUrl(BASE_PATH)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 

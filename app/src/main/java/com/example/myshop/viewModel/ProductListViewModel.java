@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.myshop.Data.Model.Product;
-import com.example.myshop.Data.repository.ProductRepository;
+import com.example.myshop.Data.repository.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,12 +16,12 @@ import java.util.Map;
 
 public class ProductListViewModel extends AndroidViewModel {
     private LiveData<List<Product>> mProductListLiveData;
-    private ProductRepository mRepository;
+    private Repository mRepository;
     Map<String, String> SortOrder;
 
     public ProductListViewModel(@NonNull Application application) {
         super(application);
-        mRepository = ProductRepository.getInstance(getApplication());
+        mRepository = Repository.getInstance(getApplication());
         mProductListLiveData = mRepository.getProductList();
         SortOrder = new HashMap<>();
     }
@@ -42,12 +42,15 @@ public class ProductListViewModel extends AndroidViewModel {
         mRepository.setSortOrder(SortOrder);
         switch (method) {
             case 1:
+                mRepository.setSearchMethod("popular");
                 fetchProductsSortPopularity();
                 break;
             case 2:
+                mRepository.setSearchMethod("price");
                 fetchProductsSortPrice();
                 break;
             case 3:
+                mRepository.setSearchMethod("date");
                 fetchProductsSortDate();
         }
     }
@@ -77,5 +80,6 @@ public class ProductListViewModel extends AndroidViewModel {
         mRepository
                 .getProductList()
                 .setValue(new ArrayList<Product>());
+        mRepository.setSearchMethod("date");
     }
 }

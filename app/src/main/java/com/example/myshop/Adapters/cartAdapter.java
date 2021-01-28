@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myshop.Data.Model.Product;
+import com.example.myshop.Data.repository.Repository;
 import com.example.myshop.R;
 import com.example.myshop.View.Activity.ProductViewActivity;
-import com.example.myshop.Data.repository.ProductRepository;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,12 +23,12 @@ import java.util.List;
 public class cartAdapter extends RecyclerView.Adapter<cartAdapter.CartItemViewHolder> {
     List<Product> mCartList;
     Context mContext;
-    ProductRepository mRepository;
+    Repository mRepository;
 
     public cartAdapter(List<Product> cartList, Context context) {
         mContext = context.getApplicationContext();
         mCartList = cartList;
-        mRepository = ProductRepository.getInstance(mContext);
+        mRepository = Repository.getInstance(mContext);
     }
 
     @NonNull
@@ -83,13 +83,15 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.CartItemViewHo
                     mRepository.
                             updateProductCart(mProduct, count);
                     ItemCount.setText(String.valueOf(count));
+                    mRepository.toggleCartChangeLive();
                 }
             });
             MinusButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mRepository.
-                            updateProductCart(mProduct, (mRepository.getProductCartCount(mProduct) - 1));
+                            updateProductCart(mProduct,
+                                    (mRepository.getProductCartCount(mProduct) - 1));
                     int count = mRepository.getProductCartCount(mProduct);
                     if (count != 0)
                         ItemCount.setText(String.valueOf(count));
@@ -97,6 +99,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.CartItemViewHo
                         mCartList.remove(mProduct);
                         notifyDataSetChanged();
                     }
+                    mRepository.toggleCartChangeLive();
                 }
             });
         }

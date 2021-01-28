@@ -1,6 +1,7 @@
 package com.example.myshop.Remote;
 
 import com.example.myshop.Data.Model.Product;
+import com.example.myshop.Data.Model.ProductAttributes;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -8,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetProductDeserializer implements JsonDeserializer<Product> {
@@ -25,6 +27,22 @@ public class GetProductDeserializer implements JsonDeserializer<Product> {
         if (inStock.equals("instock"))
             isInStock = true;
         else isInStock = false;
-        return new Product(id, name, permalink, description, price, imageUris, isInStock);
+        ProductAttributes attributes;
+//        if (productObject.get("attributes").getAsJsonObject().isJsonNull())
+        attributes = new ProductAttributes();
+//        else
+//            attributes = deserializeAttributes(productObject.get("attributes").getAsJsonObject());
+        return new Product(id, name, permalink, description, price, imageUris, isInStock, attributes);
+    }
+
+    protected static ProductAttributes deserializeAttributes(JsonObject object) {
+        int id = object.get("id").getAsInt();
+        String name = object.get("name").getAsString();
+        JsonObject optionsArray = object.get("options").getAsJsonObject();
+        List<String> options = new ArrayList<>();
+        for (JsonElement option : optionsArray.getAsJsonArray()) {
+            options.add(option.getAsString());
+        }
+        return new ProductAttributes(id, name, options);
     }
 }

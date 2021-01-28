@@ -7,42 +7,73 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.myshop.Data.Model.Product;
-import com.example.myshop.Data.repository.ProductRepository;
+import com.example.myshop.Data.repository.Repository;
 
 import java.util.List;
 
 public class HomeFragmentViewModel extends AndroidViewModel {
-    private ProductRepository mProductRepository;
+    private Repository mRepository;
     private LiveData<List<Product>> mSpecialProductLive;
+    private LiveData<List<Product>> mProductsHomeRecent;
+    private LiveData<List<Product>> mProductsLivePopular;
+    private LiveData<List<Product>> mProductLiveByRate;
+
 
     public HomeFragmentViewModel(@NonNull Application application) {
         super(application);
-        mProductRepository = ProductRepository.getInstance(getApplication());
-        mSpecialProductLive = mProductRepository.getProductListSpecial();
+        mRepository = Repository.getInstance(getApplication());
+        mSpecialProductLive = mRepository.getProductListSpecial();
+        mProductLiveByRate = mRepository.getProductsByRate();
+        mProductsHomeRecent = mRepository.getProductsRecent();
+        mProductsLivePopular = mRepository.getProductsByPopularity();
     }
 
     public LiveData<List<Product>> getSpecialProductLive() {
         return mSpecialProductLive;
     }
 
+    public LiveData<List<Product>> getProductsHomeRecent() {
+        return mProductsHomeRecent;
+    }
+
+    public LiveData<List<Product>> getProductsLivePopular() {
+        return mProductsLivePopular;
+    }
+
+    public LiveData<List<Product>> getProductLiveByRate() {
+        return mProductLiveByRate;
+    }
+
+    public void fetchLiveDataRate() {
+        mRepository.fetchByRatingHome();
+    }
+
+    public void fetchLiveDataRecent() {
+        mRepository.fetchRecentHome();
+    }
+
+    public void fetchLiveDataMostViewed() {
+        mRepository.fetchByPopularityHome();
+    }
+
     public void fetchProductListTopRated() {
-        mProductRepository.fetchProductListTopRated(1);
+        mRepository.fetchProductListTopRated(1);
     }
 
     public void fetchProductListRecent() {
-        mProductRepository.fetchProductListRecent(1);
+        mRepository.fetchProductListRecent(1);
     }
 
     public void fetchProductListPopularity() {
-        mProductRepository.fetchProductListPopularity(1);
+        mRepository.fetchProductListPopularity(1);
     }
 
     public void fetchSpecialProductList() {
-        mProductRepository.fetchSpecialProductsList(1);
+        mRepository.fetchSpecialProductsList(1);
     }
 
     public void setSearchParameter(String searchParameter) {
-        mProductRepository.setSearchText(searchParameter);
+        mRepository.setSearchText(searchParameter);
     }
 
 }

@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.myshop.Adapters.productAdapter;
 import com.example.myshop.Data.Model.Product;
@@ -56,8 +56,9 @@ public class ProductListFragment extends Fragment {
         mBinding = DataBindingUtil.
                 inflate(inflater, R.layout.fragment_list, container, false);
         mBinding.setViewModel(mProductListViewModel);
-        mBinding.list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.list.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         initViews();
+
         setListeners();
         return mBinding.getRoot();
     }
@@ -111,7 +112,7 @@ public class ProductListFragment extends Fragment {
                         boolean order;
                         order = position == 0;
                         int method = (int) mBinding.SortSpinner.getSelectedItemId();
-                        mProductListViewModel.setSortOrderAndSearch(order,method);
+                        mProductListViewModel.setSortOrderAndSearch(order, method);
                     }
 
                     @Override
@@ -119,11 +120,11 @@ public class ProductListFragment extends Fragment {
 
                     }
                 });
-        mBinding.buttonSearchProductList.setOnClickListener(new View.OnClickListener() {
+        mBinding.filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String searchParameter = mBinding.editTextProductList.getText().toString();
-                mProductListViewModel.search(searchParameter);
+//               mBinding.filterLayout.measure;
+//               mBinding.filterLayout.openDrawer(Gravity.LEFT);
             }
         });
     }
@@ -160,6 +161,5 @@ public class ProductListFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mProductListViewModel.setDefaultOnDestroy();
-
     }
 }

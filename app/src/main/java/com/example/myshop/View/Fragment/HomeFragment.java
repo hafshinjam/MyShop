@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myshop.Adapters.ProductSliderAdapter;
 import com.example.myshop.Adapters.productAdapter;
 import com.example.myshop.Data.Model.Product;
 import com.example.myshop.R;
@@ -27,15 +29,17 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding mBinding;
     private HomeFragmentViewModel mHomeFragmentViewModel;
-    private productAdapter mAdapter;
+    private ProductSliderAdapter mSliderAdapter;
+    private productAdapter mAdapterMostViewed;
+    private productAdapter mAdapterMostRecent;
+    private productAdapter mAdapterTopRated;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        return fragment;
+        return new HomeFragment();
     }
 
     @Override
@@ -44,76 +48,93 @@ public class HomeFragment extends Fragment {
         mHomeFragmentViewModel = new ViewModelProvider(this)
                 .get(HomeFragmentViewModel.class);
         mHomeFragmentViewModel.fetchSpecialProductList();
+        mHomeFragmentViewModel.fetchLiveDataMostViewed();
+        mHomeFragmentViewModel.fetchLiveDataRate();
+        mHomeFragmentViewModel.fetchLiveDataRecent();
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.
                 inflate(inflater, R.layout.fragment_home, container, false);
         mBinding.setViewModel(mHomeFragmentViewModel);
-        mBinding.specialProductList
-                .setLayoutManager(new LinearLayoutManager(getContext(),
-                        RecyclerView.HORIZONTAL, true));
+        initViews();
         setOnclickListener();
         setObservers();
         return mBinding.getRoot();
     }
 
-    private void setOnclickListener() {
-        mBinding.topRated
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mHomeFragmentViewModel.fetchProductListTopRated();
-                        showProductList();
-                        Log.d("click", "top");
-                    }
-                });
-        mBinding.newArrivals
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mHomeFragmentViewModel.fetchProductListRecent();
-                        showProductList();
-                        Log.d("click", "recent");
-                    }
-                });
-        mBinding.mostViewed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mHomeFragmentViewModel.fetchProductListPopularity();
-                showProductList();
-                Log.d("click", "popular");
-            }
-        });
+    private void initViews() {
+        mBinding.mostViewedList
+                .setLayoutManager(new LinearLayoutManager(getContext(),
+                        RecyclerView.HORIZONTAL, true));
+        mBinding.newArrivalList
+                .setLayoutManager(new LinearLayoutManager(getContext(),
+                        RecyclerView.HORIZONTAL, true));
+        mBinding.topRatedList
+                .setLayoutManager(new LinearLayoutManager(getContext(),
+                        RecyclerView.HORIZONTAL, true));
 
-     /*   mBinding.searchButtonHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String search = mBinding.editTextProductHome.getText().toString();
-                mHomeFragmentViewModel.setSearchParameter(search);
-                mHomeFragmentViewModel.fetchProductListRecent();
-                showProductList();
-            }
-        });*/
+    }
+
+    private void setOnclickListener() {
+        mBinding.topRatedTextButton
+                .setOnClickListener(v -> {
+                    mHomeFragmentViewModel.fetchProductListTopRated();
+                    showProductList();
+                    Log.d("click", "top");
+                });
+        mBinding.newArrivalTextButton
+                .setOnClickListener(v -> {
+                    mHomeFragmentViewModel.fetchProductListRecent();
+                    showProductList();
+                    Log.d("click", "recent");
+                });
+        mBinding.mostViewedTextButton.setOnClickListener(v -> {
+            mHomeFragmentViewModel.fetchProductListPopularity();
+            showProductList();
+            Log.d("click", "popular");
+        });
     }
 
     public void setObservers() {
         mHomeFragmentViewModel.getSpecialProductLive()
+                .observe(getViewLifecycleOwner(), products -> {
+                    if (getContext() != null) {
+                        mSliderAdapter = new ProductSliderAdapter(getContext(), products);
+                        mBinding.specialProductSlider.setSliderAdapter(mSliderAdapter);
+
+                        mSliderAdapter.notifyDataSetChanged();
+                        mBinding.specialProductSlider.startAutoCycle();
+                    }
+                });
+        mHomeFragmentViewModel.getProductLiveByRate()
                 .observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
                     @Override
                     public void onChanged(List<Product> products) {
-                        initSpecialList(products);
+                        mAdapterTopRated = new productAdapter(products, getContext());
+                        mBinding.topRatedList.setAdapter(mAdapterTopRated);
+                        mAdapterTopRated.notifyDataSetChanged();
                     }
-
-                    private void initSpecialList(List<Product> products) {
-                        if (mAdapter == null) {
-                            mAdapter = new productAdapter(products, getContext());
-                            mBinding.specialProductList.setAdapter(mAdapter);
-                        }
-                        mAdapter.notifyDataSetChanged();
+                });
+        mHomeFragmentViewModel.getProductsLivePopular()
+                .observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
+                    @Override
+                    public void onChanged(List<Product> products) {
+                        mAdapterMostViewed = new productAdapter(products, getContext());
+                        mBinding.mostViewedList.setAdapter(mAdapterMostViewed);
+                        mAdapterMostViewed.notifyDataSetChanged();
+                    }
+                });
+        mHomeFragmentViewModel.getProductsHomeRecent()
+                .observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
+                    @Override
+                    public void onChanged(List<Product> products) {
+                        mAdapterMostRecent = new productAdapter(products, getContext());
+                        mBinding.newArrivalList.setAdapter(mAdapterMostRecent);
+                        mAdapterMostRecent.notifyDataSetChanged();
                     }
                 });
     }

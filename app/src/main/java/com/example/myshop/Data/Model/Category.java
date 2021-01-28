@@ -9,7 +9,8 @@ import java.util.Objects;
 
 @Entity(tableName = "CategoryTable")
 public class Category {
-    @PrimaryKey @NonNull
+    @PrimaryKey
+    @NonNull
     private String categoryID;
     @ColumnInfo(name = "parentCategoryID")
     private String parentCategoryID;
@@ -17,9 +18,6 @@ public class Category {
     private String categoryName;
     @ColumnInfo(name = "categoryPhotoURL")
     private String photoUri;
-
-    public Category() {
-    }
 
     public Category(String categoryName, String categoryID, String photoUri, String parentCategoryID) {
         this.categoryName = categoryName;

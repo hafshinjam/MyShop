@@ -26,7 +26,7 @@ public class GetCategoryDeserializer implements JsonDeserializer<List<Category>>
             String categoryName = categoryObject.get("name").getAsString();
             String photoUri = getCategoryPhotoUriFromJson(categoryObject.get("image").getAsJsonObject());
             String parentCategoryId = categoryObject.get("parent").getAsString();
-            Category category = new Category(categoryName, id, photoUri,parentCategoryId);
+            Category category = new Category(categoryName, id, photoUri, parentCategoryId);
             categoryList.add(category);
         }
         return categoryList;

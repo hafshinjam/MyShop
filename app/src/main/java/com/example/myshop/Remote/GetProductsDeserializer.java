@@ -1,6 +1,7 @@
 package com.example.myshop.Remote;
 
 import com.example.myshop.Data.Model.Product;
+import com.example.myshop.Data.Model.ProductAttributes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -36,7 +37,8 @@ public class GetProductsDeserializer implements JsonDeserializer<List<Product>> 
             if (inStock.equals("instock"))
                 isInStock = true;
             else isInStock = false;
-            Product product = new Product(id, name, permalink, description, price, imageUris, isInStock);
+            ProductAttributes attributes = new ProductAttributes();
+            Product product = new Product(id, name, permalink, description, price, imageUris, isInStock, attributes);
             list.add(product);
         }
         return list;

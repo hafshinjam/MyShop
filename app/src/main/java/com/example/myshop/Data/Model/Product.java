@@ -10,6 +10,7 @@ public class Product {
     private long mPrice;
     private List<String> mPhotoUriList;
     private boolean mIsInStock;
+    private ProductAttributes mProductAttributes;
 
     public Product() {
     }
@@ -19,7 +20,8 @@ public class Product {
                    String description,
                    long price,
                    List<String> photoUriList,
-                   boolean isInStock
+                   boolean isInStock,
+                   ProductAttributes attributes
     ) {
         mId = id;
         mName = name;
@@ -28,6 +30,7 @@ public class Product {
         mPrice = price;
         mPhotoUriList = photoUriList;
         mIsInStock = isInStock;
+        mProductAttributes = attributes;
     }
 
     public String getId() {
@@ -84,5 +87,13 @@ public class Product {
 
     public void setInStock(boolean inStock) {
         mIsInStock = inStock;
+    }
+
+    public ProductAttributes getProductAttributes() {
+        return mProductAttributes;
+    }
+
+    public void setProductAttributes(ProductAttributes productAttributes) {
+        mProductAttributes = productAttributes;
     }
 }

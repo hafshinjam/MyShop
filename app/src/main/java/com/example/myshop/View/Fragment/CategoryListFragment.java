@@ -13,10 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.myshop.Adapters.categoryAdapter;
 import com.example.myshop.Data.Model.Category;
+import com.example.myshop.Data.repository.Repository;
 import com.example.myshop.R;
 import com.example.myshop.databinding.FragmentCategoryListBinding;
-import com.example.myshop.databinding.FragmentListBinding;
-import com.example.myshop.Data.repository.ProductRepository;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class CategoryListFragment extends Fragment {
     private FragmentCategoryListBinding mCategoryListBinding;
 
     private categoryAdapter mCategoryAdapter;
-    private ProductRepository mRepository;
+    private Repository mRepository;
     private LiveData<List<Category>> mCategoryListLive;
 
     public CategoryListFragment() {
@@ -41,7 +40,7 @@ public class CategoryListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRepository = ProductRepository.getInstance(getContext());
+        mRepository = Repository.getInstance(getContext());
         mCategoryListLive = mRepository.getCategoriesList();
   /*      registerObservers();
         mRepository.fetchCategoriesList();*/
@@ -97,8 +96,8 @@ public class CategoryListFragment extends Fragment {
     }
 
     private void initAdapters(List<Category> list) {
-            mCategoryAdapter = new categoryAdapter(list, getActivity());
-            mCategoryListBinding.categoryList.setAdapter(mCategoryAdapter);
+        mCategoryAdapter = new categoryAdapter(list, getActivity());
+        mCategoryListBinding.categoryList.setAdapter(mCategoryAdapter);
 
         mCategoryAdapter.notifyDataSetChanged();
     }

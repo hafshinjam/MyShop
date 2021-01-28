@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/colorGroup" android:checkableBehavior="all">
+        <item
+            android:id="@+id/colorBlue"
+            android:title="آبی"
+            />
+        <item
+            android:id="@+id/colorRed"
+            android:title="قرمز"/>
+        <item
+            android:id="@+id/colorGreen"
+            android:title="سبز"/>
+        <item
+            android:id="@+id/colorYellow"
+            android:title="زرد"/>
+        <item
+            android:id="@+id/colorBlack"
+            android:title="سیاه"/>
+        <item
+            android:id="@+id/colorBrown"
+            android:title="قهوه ای"/>
+    </group>
+    <group android:id="@+id/SizeFilter" android:checkableBehavior="all">
+        <item android:id="@+id/XXLSize" android:title="XXL"/>
+        <item android:id="@+id/XLSize" android:title="XL" />
+        <item android:id="@+id/LSize" android:title="L" />
+        <item android:id="@+id/MSize" android:title="M" />
+        <item android:id="@+id/SSize" android:title="S" />
+        <item android:id="@+id/Size40" android:title="40" />
+        <item android:id="@+id/Size41" android:title="41" />
+        <item android:id="@+id/Size42" android:title="42" />
+        <item android:id="@+id/Size43" android:title="43" />
+        <item android:id="@+id/Size44" android:title="44" />
+        <item android:id="@+id/Size45" android:title="45" />
+    </group>
+</menu>

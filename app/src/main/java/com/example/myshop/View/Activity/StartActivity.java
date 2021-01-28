@@ -8,21 +8,21 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.example.myshop.Data.Model.Category;
-import com.example.myshop.Data.repository.ProductRepository;
+import com.example.myshop.Data.repository.Repository;
 import com.example.myshop.R;
 
 import java.util.List;
 
 public class StartActivity extends AppCompatActivity {
     MutableLiveData<List<Category>> mCategoryLiveData;
-    ProductRepository mProductRepository;
+    Repository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        mProductRepository = ProductRepository.getInstance(getApplicationContext());
-        mCategoryLiveData = mProductRepository.getCategoriesList();
+        mRepository = Repository.getInstance(getApplicationContext());
+        mCategoryLiveData = mRepository.getCategoriesList();
         mCategoryLiveData.observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
@@ -31,6 +31,6 @@ public class StartActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mProductRepository.fetchCategoriesList();
+        mRepository.fetchCategoriesList();
     }
 }
