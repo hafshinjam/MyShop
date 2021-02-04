@@ -16,20 +16,22 @@
         android:layout_height="match_parent"
         tools:context=".View.Fragment.ProductViewFragment">
 
-        <ImageView
-            android:id="@+id/productImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.smarteist.autoimageslider.SliderView
+            android:id="@+id/productImageSlider"
+            android:layout_width="0dp"
+            android:layout_height="256dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/product_image"
-            android:src="@drawable/ic_product"
             app:layout_constraintBottom_toTopOf="@+id/productNameTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:sliderStartAutoCycle="true"
+            app:sliderAutoCycleEnabled="true"
+            app:sliderAnimationDuration="700"/>
 
         <TextView
             android:id="@+id/productNameTextView"
@@ -41,7 +43,7 @@
             android:text="@{viewModel.productTitle}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/productImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/productImageSlider" />
 
         <View
             android:id="@+id/separator1"
@@ -57,7 +59,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/detailButton"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="56dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
@@ -82,7 +84,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/commentsButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="16dp"
             android:text="نظرات کاربران"
@@ -109,11 +111,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/separator2"
-            android:visibility="invisible">
+            app:layout_constraintTop_toBottomOf="@+id/separator2">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -154,6 +156,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:text="@{viewModel.productDescription}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/productDescriptionTitle"

@@ -170,22 +170,22 @@ public class Repository {
 
     public void fetchRecentHome() {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
-        fetchHomeList(OPTIONS, mProductsRecent);
+        fetchHomeList(OPTIONS, mProductsRecent,"date");
     }
 
     public void fetchByRatingHome() {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
-        fetchHomeList(OPTIONS, mProductsByRate);
+        fetchHomeList(OPTIONS, mProductsByRate,"rating");
     }
 
     public void fetchByPopularityHome() {
         Map<String, String> OPTIONS = new HashMap<>(QUERY_OPTIONS);
-        fetchHomeList(OPTIONS, mProductsByPopularity);
+        fetchHomeList(OPTIONS, mProductsByPopularity,"popularity");
     }
 
     private void fetchHomeList(Map<String, String> OPTIONS,
-                               MutableLiveData<List<Product>> products) {
-        OPTIONS.put("orderby", "date");
+                               MutableLiveData<List<Product>> products,String searchMethod) {
+        OPTIONS.put("orderby", searchMethod);
         OPTIONS.putAll(SortOrder);
         if (categoryID != null) {
             OPTIONS.put("category", categoryID);

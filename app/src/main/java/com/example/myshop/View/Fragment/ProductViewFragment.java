@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myshop.Adapters.ImageSliderAdapter;
 import com.example.myshop.R;
 import com.example.myshop.databinding.FragmentProductViewBinding;
 import com.example.myshop.viewModel.ProductViewModel;
@@ -18,6 +19,7 @@ public class ProductViewFragment extends Fragment {
 
     private FragmentProductViewBinding mProductViewBinding;
     public ProductViewModel mViewModel;
+    public ImageSliderAdapter mSliderAdapter;
 
 
     public ProductViewFragment() {
@@ -44,7 +46,11 @@ public class ProductViewFragment extends Fragment {
         mProductViewBinding = DataBindingUtil
                 .inflate(inflater, R.layout.fragment_product_view, container, false);
         mProductViewBinding.setViewModel(mViewModel);
-        mViewModel.setProductPicture(mProductViewBinding.productImageView);
+        mSliderAdapter = new ImageSliderAdapter(mViewModel.getImagesUrl());
+        mProductViewBinding.productImageSlider
+                .setSliderAdapter(mSliderAdapter);
+        mSliderAdapter.notifyDataSetChanged();
+        mProductViewBinding.productImageSlider.startAutoCycle();
         mProductViewBinding.productCount
                 .setText(String.valueOf(mViewModel.getProductCount()));
         setListeners();

@@ -62,6 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
+                        android:padding="4dp"
                         android:text="@string/show_product_list"
                         android:textAlignment="viewStart"
                         android:textColor="#3F51B5" />
@@ -73,8 +74,9 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:background="#B2FF59"
+                        android:padding="4dp"
                         android:text="@string/New"
-                        android:textAlignment="viewEnd"
+                        android:textAlignment="center"
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -96,6 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
+                        android:padding="4dp"
                         android:text="@string/show_product_list"
                         android:textAlignment="viewStart"
                         android:textColor="#3F51B5" />
@@ -107,8 +110,9 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:background="#FF5252"
+                        android:padding="4dp"
                         android:text="@string/most_viewed_products"
-                        android:textAlignment="viewEnd"
+                        android:textAlignment="center"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -129,6 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
+                        android:padding="4dp"
                         android:text="@string/show_product_list"
                         android:textAlignment="viewStart"
                         android:textColor="#3F51B5" />
@@ -140,6 +145,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:background="#7C4DFF"
+                        android:padding="4dp"
                         android:text="@string/popular_products"
                         android:textAlignment="center"
                         android:textSize="16sp" />

@@ -13,6 +13,8 @@ import com.example.myshop.Data.repository.Repository;
 import com.example.myshop.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class ProductViewModel extends AndroidViewModel {
     private Product mProduct;
     private Repository mRepository;
@@ -58,11 +60,8 @@ public class ProductViewModel extends AndroidViewModel {
         return String.valueOf(mProduct.getPrice());
     }
 
-    public void setProductPicture(ImageView productPicture) {
-        Picasso.get()
-                .load(mProduct.getPhotoUriList().get(0))
-                .placeholder(R.drawable.ic_product)
-                .into(productPicture);
+    public List<String> getImagesUrl() {
+        return mProduct.getPhotoUriList();
     }
 
     public int getProductCount() {
